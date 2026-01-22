@@ -33,8 +33,8 @@ A modern, interactive quiz application built with Next.js, TypeScript, and Tailw
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/quiz.git
-cd quiz
+git clone https://github.com/Hasanain-Jaafar/QuizMaster.git
+cd QuizMaster
 ```
 
 2. Install dependencies:
