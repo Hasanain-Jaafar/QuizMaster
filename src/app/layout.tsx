@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'QuizMaster - Interactive Quiz App',
   description: 'Test your knowledge with our interactive quiz app featuring instant feedback and detailed explanations.',
+  icons: {
+    icon: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
