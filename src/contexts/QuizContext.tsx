@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 import { QuizState } from '@/types/quiz';
 import { quizQuestions } from '@/data/quizData';
 
@@ -15,6 +15,9 @@ interface QuizContextType extends QuizState {
   goToQuestion: (index: number) => void;
   showResults: () => void; // New function to show results
   isAnswerLocked: (questionIndex: number) => boolean; // Check if answer is locked
+  reviewMode: boolean; // Whether we're in review mode
+  enterReviewMode: () => void; // Enter review mode to review questions
+  exitReviewMode: () => void; // Exit review mode back to results
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
@@ -23,9 +26,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const [quizState, setQuizState] = useState<QuizState>({
     currentQuestionIndex: 0,
     score: 0,
-    userAnswers: Array(quizQuestions.length).fill(-1), // -1 means not answered
+    userAnswers: Array(quizQuestions.length).fill(-1),
     quizCompleted: false,
   });
+  const [reviewMode, setReviewMode] = useState(false);
 
   const selectAnswer = (optionIndex: number) => {
     if (quizState.quizCompleted || quizState.userAnswers[quizState.currentQuestionIndex] !== -1) {
@@ -87,6 +91,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       userAnswers: Array(quizQuestions.length).fill(-1),
       quizCompleted: false,
     });
+    setReviewMode(false);
   };
 
   const goToQuestion = (index: number) => {
@@ -99,8 +104,20 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   };
 
   const isAnswerLocked = (questionIndex: number) => {
-    // Answers are locked if quiz is completed or if the question has already been answered
-    return quizState.quizCompleted || quizState.userAnswers[questionIndex] !== -1;
+    // Answers are locked if quiz is completed, in review mode, or if the question has already been answered
+    return quizState.quizCompleted || reviewMode || quizState.userAnswers[questionIndex] !== -1;
+  };
+
+  const enterReviewMode = () => {
+    setReviewMode(true);
+    setQuizState(prev => ({
+      ...prev,
+      currentQuestionIndex: 0, // Start from first question
+    }));
+  };
+
+  const exitReviewMode = () => {
+    setReviewMode(false);
   };
 
   const value: QuizContextType = {
@@ -114,6 +131,9 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     goToQuestion,
     showResults,
     isAnswerLocked,
+    reviewMode,
+    enterReviewMode,
+    exitReviewMode,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

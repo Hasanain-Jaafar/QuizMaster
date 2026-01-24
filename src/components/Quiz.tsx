@@ -10,7 +10,7 @@ import { HelpCircle, CheckCircle, Clock, Smartphone, Tablet, Monitor, AlertCircl
 import { useEffect, useState } from 'react';
 
 export default function Quiz() {
-  const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions } = useQuiz();
+  const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions, reviewMode } = useQuiz();
   const [timeSpent, setTimeSpent] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   
@@ -45,7 +45,8 @@ export default function Quiz() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  if (quizCompleted) {
+  // Show score display only if quiz is completed and not in review mode
+  if (quizCompleted && !reviewMode) {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-6 md:space-y-8">
@@ -62,7 +63,14 @@ export default function Quiz() {
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="space-y-6 md:space-y-8 animate-fade-in">
         {/* Header Section */}
-        <div className="bg-linear-to-r from-primary/5 via-secondary/5 to-primary/10 rounded-2xl md:rounded-3xl p-4 md:p-6 border border-primary/20">
+        <div className="bg-linear-to-r from-primary/5 via-secondary/5 to-primary/10 rounded-xl md:rounded-xl p-4 md:p-6 border border-primary/20">
+          {reviewMode && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-blue-800 text-sm font-medium text-center">
+                📖 Review Mode: You can review your answers but cannot change them
+              </p>
+            </div>
+          )}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
             <div className="flex-1">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark-300">
@@ -70,7 +78,7 @@ export default function Quiz() {
                 {isLastQuestion && <span className="ml-2 text-accent">(Last Question!)</span>}
               </h1>
               <p className="text-dark-200 mt-1 text-sm md:text-base">
-                Select the correct answer from the three options below
+                {reviewMode ? 'Review your answer and the explanation below' : 'Select the correct answer from the three options below'}
               </p>
             </div>
             
@@ -105,7 +113,7 @@ export default function Quiz() {
         </div>
 
         {/* Main Quiz Card */}
-        <div className="bg-white rounded-2xl md:rounded-3xl shadow-lg p-4 md:p-8 lg:p-10 border border-light-300">
+        <div className="bg-white rounded-xl md:rounded-xl shadow-lg p-4 md:p-8 lg:p-10 border border-light-300">
           {/* Question Header */}
           <div className="flex items-start justify-between mb-6 md:mb-10">
             <div className="flex-1">
@@ -129,7 +137,7 @@ export default function Quiz() {
                       userAnswer === currentQuestion.correctAnswer
                         ? 'bg-green-100 text-green-700'
                         : 'bg-red-100 text-red-700'
-                    } text-xs md:text-sm font-semibold rounded-lg`}>
+                    } text-xs md:text-sm font-semibold rounded-sm`}>
                       {userAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect'}
                     </span>
                   )}
@@ -171,28 +179,11 @@ export default function Quiz() {
             })}
           </div>
 
-          {/* Last Question Message */}
-          {isLastQuestion && allAnswered && !quizCompleted && (
-            <div className="mt-6 md:mt-8 p-4 md:p-6 bg-linear-to-r from-emerald-50 to-green-50 rounded-xl md:rounded-2xl border border-emerald-200 animate-fade-in">
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-emerald-100 rounded-lg">
-                  <Trophy className="w-6 h-6 md:w-8 md:h-8 text-emerald-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg md:text-xl font-bold text-emerald-800 mb-2">
-                    🎉 All Questions Answered!
-                  </h3>
-                  <p className="text-emerald-700">
-                    You&apos;ve answered all {totalQuestions} questions. Click &quot;Show Results&quot; to see your final score and detailed feedback.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          
 
           {/* Answer Feedback Section */}
           {hasAnswered && (
-            <div className={`mt-6 md:mt-10 p-4 md:p-6 rounded-xl md:rounded-2xl border ${
+            <div className={`mt-6 md:mt-10 p-4 md:p-6 rounded-xl md:rounded-xl border ${
               userAnswer === currentQuestion.correctAnswer
                 ? 'bg-green-50 border-green-200'
                 : 'bg-red-50 border-red-200'
@@ -216,7 +207,7 @@ export default function Quiz() {
                       {userAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not Quite Right'}
                     </h3>
                     {userAnswer !== currentQuestion.correctAnswer && (
-                      <span className="px-3 py-1 bg-accent text-white text-sm font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-accent text-white text-sm font-semibold rounded-sm">
                         Try Again Next Time!
                       </span>
                     )}
@@ -236,29 +227,24 @@ export default function Quiz() {
                       </div>
                     </>
                   )}
-                  
-                  {/* Quick Stats */}
-                  {isLastQuestion && allAnswered && !quizCompleted && (
-  <div className="mt-6 md:mt-8 p-4 md:p-6 bg-linear-to-r from-emerald-50 to-green-50 rounded-xl md:rounded-2xl border border-emerald-200 animate-fade-in">
-    <div className="flex items-start gap-4">
-      <div className="p-2 bg-emerald-100 rounded-lg">
-        <Trophy className="w-6 h-6 md:w-8 md:h-8 text-emerald-600" />
-      </div>
-      <div className="flex-1">
-        <h3 className="text-lg md:text-xl font-bold text-emerald-800 mb-2">
-          🎉 All Questions Answered!
-        </h3>
-        <p className="text-emerald-700 mb-3">
-          You&apos;ve answered all {totalQuestions} questions. Click the <strong>&apos;Show Results&apos;</strong> button below to see your final score and detailed feedback.
-        </p>
-        <div className="flex items-center gap-2 text-sm text-emerald-800">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-          <span>Look for the green &apos;Show Results&apos; button in the navigation area below</span>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
+                </div>
+              </div>
+            </div>
+          )}
+          {/* Last Question Message */}
+          {isLastQuestion && allAnswered && !quizCompleted && (
+            <div className="mt-6 md:mt-8 p-4 md:p-6 bg-linear-to-r from-emerald-50 to-green-50 rounded-xl md:rounded-xl border border-emerald-200 animate-fade-in">
+              <div className="flex items-start gap-4">
+                <div className="p-2 bg-emerald-100 rounded-lg">
+                  <Trophy className="w-6 h-6 md:w-8 md:h-8 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg md:text-xl font-bold text-emerald-800 mb-2">
+                    🎉 All Questions Answered!
+                  </h3>
+                  <p className="text-emerald-700">
+                    You&apos;ve answered all {totalQuestions} questions. Click &quot;Show Results&quot; to see your final score and detailed feedback.
+                  </p>
                 </div>
               </div>
             </div>

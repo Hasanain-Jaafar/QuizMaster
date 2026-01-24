@@ -30,7 +30,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
 
   // Color states based on answer status
   const getButtonStyles = () => {
-    const baseStyles = 'w-full p-4 md:p-6 rounded-xl md:rounded-2xl text-left transition-all duration-300 border-2 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md active:scale-[0.98] ';
+    const baseStyles = 'w-full p-4 md:p-6 rounded-xl md:rounded-xl text-left transition-all duration-300 border-2 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md active:scale-[0.98] ';
     
     if (!isAnswered) {
       return baseStyles + (
@@ -154,7 +154,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
       
       {/* Hover indicator */}
       {!isAnswered && isHovered && !isSelected && (
-        <div className="absolute inset-0 border-2 border-secondary rounded-xl md:rounded-2xl pointer-events-none animate-pulse-subtle" />
+        <div className="absolute inset-0 border-2 border-secondary rounded-xl md:rounded-xl pointer-events-none animate-pulse-subtle" />
       )}
     </button>
   );

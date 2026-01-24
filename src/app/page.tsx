@@ -9,23 +9,22 @@ export default function Home() {
     <QuizProvider>
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b">
+        <header className="bg-white shadow-sm border-b border-gray-200 py-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
+            <div className="flex flex-col md:flex-row justify-between items-center h-16">
               <div className="flex items-center space-x-3">
-                <div className="flex items-center justify-center w-10 h-10 bg-linear-to-r from-blue-600 to-purple-600 rounded-lg">
+                <div className="flex items-center justify-center w-10 h-10 bg-linear-to-r from-blue-600 to-gray-400 rounded-lg">
                   <Brain className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">QuizMaster</h1>
-                  <p className="text-sm text-gray-500">Test your knowledge</p>
+                  <h1 className="text-2xl font-bold text-gray-700">Alaradi Quiz</h1>
                 </div>
               </div>
               
               <div className="hidden md:flex items-center space-x-6">
                 <div className="flex items-center space-x-2 text-gray-600">
                   <Target className="w-4 h-4" />
-                  <span>10 Questions</span>
+                  <span>100 Questions</span>
                 </div>
                 <div className="flex items-center space-x-2 text-gray-600">
                   <Clock className="w-4 h-4" />
@@ -44,9 +43,9 @@ export default function Home() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Welcome to the Ultimate Quiz Challenge
+              Welcome to Alaradi Quiz Challenge
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Test your knowledge across various topics. Select one answer per question. 
               You&apos;ll get immediate feedback and explanations!
             </p>
@@ -55,7 +54,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Quiz Instructions</h3>
                 <ul className="space-y-4">
                   <li className="flex items-start space-x-3">
@@ -107,10 +106,10 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="mt-12 border-t bg-white">
+        <footer className="mt-12 border-t bg-white border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="text-center text-gray-500 text-sm">
-              <p>© 2024 QuizMaster. All questions are for educational purposes.</p>
+              <p>© 2026 Alaradi Quiz. All questions are for educational purposes.</p>
               <p className="mt-2">Built with Next.js 14, TypeScript, and Tailwind CSS</p>
             </div>
           </div>

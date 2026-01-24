@@ -1,8 +1,7 @@
-// src/components/QuestionNavigation.tsx
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
-import { ChevronLeft, ChevronRight, Home, RotateCcw, SkipBack, SkipForward, List, Eye, Trophy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, RotateCcw, SkipBack, SkipForward, List, Trophy } from 'lucide-react';
 import { useState } from 'react';
 
 export default function QuestionNavigation() {
@@ -16,7 +15,9 @@ export default function QuestionNavigation() {
     showResults,
     userAnswers,
     quizCompleted,
-    questions
+    questions,
+    reviewMode,
+    exitReviewMode
   } = useQuiz();
   
   const [showQuestionList, setShowQuestionList] = useState(false);
@@ -27,13 +28,13 @@ export default function QuestionNavigation() {
 
   return (
     <div className="relative">
-      <div className="bg-white rounded-xl md:rounded-2xl shadow-lg p-4 border border-light-300">
+      <div className="bg-white rounded-xl md:rounded-xl shadow-lg p-4 border border-light-300">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Navigation Buttons */}
           <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-2">
             <button
               onClick={prevQuestion}
-              disabled={currentQuestionIndex === 0 || quizCompleted}
+              disabled={currentQuestionIndex === 0 || (quizCompleted && !reviewMode)}
               className="flex-1 sm:flex-none px-4 py-3 bg-light-100 hover:bg-light-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center gap-2"
               aria-label="Previous question"
             >
@@ -50,7 +51,7 @@ export default function QuestionNavigation() {
             
             <button
               onClick={nextQuestion}
-              disabled={currentQuestionIndex === totalQuestions - 1 || quizCompleted}
+              disabled={currentQuestionIndex === totalQuestions - 1 || (quizCompleted && !reviewMode)}
               className="flex-1 sm:flex-none px-4 py-3 bg-light-100 hover:bg-light-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center gap-2"
               aria-label="Next question"
             >
@@ -63,7 +64,7 @@ export default function QuestionNavigation() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => goToQuestion(0)}
-              disabled={currentQuestionIndex === 0 || quizCompleted}
+              disabled={currentQuestionIndex === 0 || (quizCompleted && !reviewMode)}
               className="p-3 hover:bg-light-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
               aria-label="Go to first question"
             >
@@ -84,7 +85,7 @@ export default function QuestionNavigation() {
             
             <button
               onClick={() => goToQuestion(totalQuestions - 1)}
-              disabled={currentQuestionIndex === totalQuestions - 1 || quizCompleted}
+              disabled={currentQuestionIndex === totalQuestions - 1 || (quizCompleted && !reviewMode)}
               className="p-3 hover:bg-light-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
               aria-label="Go to last question"
             >
@@ -94,8 +95,19 @@ export default function QuestionNavigation() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2 w-full sm:w-auto">
+            {/* Back to Results Button - Show when in review mode */}
+            {reviewMode && (
+              <button
+                onClick={exitReviewMode}
+                className="flex-1 sm:flex-none px-4 py-3 bg-primary text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium"
+              >
+                <Trophy className="w-5 h-5" />
+                <span className="text-sm">Back to Results</span>
+              </button>
+            )}
+            
             {/* Show Results Button - Show on last question when all are answered */}
-            {isLastQuestion && !quizCompleted && allQuestionsAnswered && (
+            {isLastQuestion && !quizCompleted && allQuestionsAnswered && !reviewMode && (
               <button
                 onClick={showResults}
                 className="flex-1 sm:flex-none px-4 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-xl"
@@ -106,8 +118,8 @@ export default function QuestionNavigation() {
             )}
             
             {/* Alternative: Show "Complete All Questions" when not all answered on last question */}
-            {isLastQuestion && !quizCompleted && !allQuestionsAnswered && (
-              <div className="flex-1 sm:flex-none px-4 py-3 bg-amber-50 text-amber-800 rounded-lg border border-amber-200 flex items-center justify-center gap-2 font-medium">
+            {isLastQuestion && !quizCompleted && !allQuestionsAnswered && !reviewMode && (
+              <div className="flex-1 sm:flex-none px-4 py-3 bg-amber-50 text-amber-800 rounded-sm border border-amber-200 flex items-center justify-center gap-2 font-medium">
                 <span className="text-sm font-semibold">
                   {answeredCount}/{totalQuestions} Answered
                 </span>
@@ -117,7 +129,7 @@ export default function QuestionNavigation() {
             {/* Restart Button - Always visible */}
             <button
               onClick={restartQuiz}
-              className="flex-1 sm:flex-none px-4 py-3 bg-gradient-accent text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium"
+              className="flex-1 sm:flex-none px-4 py-3 bg-primary text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium"
             >
               <RotateCcw className="w-5 h-5" />
               <span className="text-sm">Restart</span>
@@ -127,7 +139,7 @@ export default function QuestionNavigation() {
 
         {/* Progress Message for Last Question */}
         {isLastQuestion && !quizCompleted && (
-          <div className={`mt-4 p-3 rounded-lg border text-center ${
+          <div className={`mt-4 p-3 rounded-sm border text-center ${
             allQuestionsAnswered
               ? 'bg-green-50 border-green-200 text-green-800'
               : 'bg-amber-50 border-amber-200 text-amber-800'

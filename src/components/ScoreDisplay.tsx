@@ -5,7 +5,7 @@ import { useQuiz } from '@/contexts/QuizContext';
 import { Trophy, Sparkles, CheckCircle, XCircle, Eye, RotateCcw } from 'lucide-react';
 
 export default function ScoreDisplay() {
-  const { score, totalQuestions, quizCompleted, questions, userAnswers, goToQuestion } = useQuiz();
+  const { score, totalQuestions, quizCompleted, questions, userAnswers, goToQuestion, enterReviewMode } = useQuiz();
   
   if (!quizCompleted) return null;
 
@@ -51,7 +51,7 @@ export default function ScoreDisplay() {
   const performance = getPerformance();
 
   return (
-    <div className={`${performance.bgColor} rounded-2xl md:rounded-3xl p-6 md:p-8 border ${performance.borderColor} animate-slide-up`}>
+    <div className={`${performance.bgColor} rounded-xl md:rounded-xl p-6 md:p-8 border ${performance.borderColor} animate-slide-up`}>
       <div className="text-center space-y-6 md:space-y-8">
         {/* Header */}
         <div className="relative">
@@ -92,7 +92,10 @@ export default function ScoreDisplay() {
               return (
                 <button
                   key={question.id}
-                  onClick={() => goToQuestion(index)}
+                  onClick={() => {
+                    enterReviewMode();
+                    goToQuestion(index);
+                  }}
                   className={`p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 ${
                     isAnswered
                       ? isCorrect
@@ -170,7 +173,7 @@ export default function ScoreDisplay() {
         {/* Action Buttons */}
         <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button
-            onClick={() => goToQuestion(0)}
+            onClick={enterReviewMode}
             className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
           >
             <Eye className="w-5 h-5" />

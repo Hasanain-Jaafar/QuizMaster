@@ -2,13 +2,13 @@ export interface QuizQuestion {
     id: number;
     question: string;
     options: string[];
-    correctAnswer: number; // Index of correct option (0, 1, or 2)
+    correctAnswer: number; 
     explanation?: string;
   }
   
   export interface QuizState {
     currentQuestionIndex: number;
     score: number;
-    userAnswers: number[]; // Store selected option index for each question
+    userAnswers: number[]; 
     quizCompleted: boolean;
   }
