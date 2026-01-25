@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs';
+import { connectLambda, getStore } from '@netlify/blobs';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -15,15 +15,16 @@ type Room = {
   createdAt: number;
 };
 
-export async function handler(req: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
-  if (req.httpMethod === 'OPTIONS') {
+export async function handler(event: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
+  connectLambda(event);
+  if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
   }
-  if (req.httpMethod !== 'GET') {
+  if (event.httpMethod !== 'GET') {
     return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  const code = (req.queryStringParameters?.code || '').toUpperCase().trim();
+  const code = (event.queryStringParameters?.code || '').toUpperCase().trim();
   if (!code) {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Missing code' }) };
   }

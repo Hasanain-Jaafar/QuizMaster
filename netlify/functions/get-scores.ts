@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs';
+import { connectLambda, getStore } from '@netlify/blobs';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -9,15 +9,16 @@ const CORS = {
 type ScoreEntry = { score: number; total: number; category: string; date: string };
 type PlayerData = { history: ScoreEntry[] };
 
-export async function handler(req: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
-  if (req.httpMethod === 'OPTIONS') {
+export async function handler(event: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
+  connectLambda(event);
+  if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
   }
-  if (req.httpMethod !== 'GET') {
+  if (event.httpMethod !== 'GET') {
     return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
-  const playerId = req.queryStringParameters?.playerId ?? undefined;
+  const playerId = event.queryStringParameters?.playerId ?? undefined;
 
   const store = getStore('quiz-data');
   const result: { player1?: PlayerData; player2?: PlayerData } = {};

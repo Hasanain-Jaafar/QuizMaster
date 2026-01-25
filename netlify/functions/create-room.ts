@@ -1,4 +1,4 @@
-import { getStore } from '@netlify/blobs';
+import { connectLambda, getStore } from '@netlify/blobs';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -13,11 +13,12 @@ function randomCode(): string {
   return s;
 }
 
-export async function handler(req: { httpMethod: string }) {
-  if (req.httpMethod === 'OPTIONS') {
+export async function handler(event: { httpMethod: string }) {
+  connectLambda(event);
+  if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
   }
-  if (req.httpMethod !== 'POST') {
+  if (event.httpMethod !== 'POST') {
     return { statusCode: 405, headers: CORS, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
