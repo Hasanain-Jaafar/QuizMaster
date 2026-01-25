@@ -30,7 +30,7 @@ export default function Home() {
     <QuizProvider>
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 py-4">
+        <header className="bg-white shadow-sm border-b border-gray-200 py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center h-16">
               <div className="flex items-center space-x-3">
@@ -43,8 +43,24 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-4 md:gap-6">
-                {/* Language dropdown */}
-                <div className="relative" ref={langDropdownRef}>
+               
+
+                <div className="hidden md:flex items-center space-x-6">
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <Target className="w-4 h-4" />
+                    <span>{t('header100')}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <Clock className="w-4 h-4" />
+                    <span>{t('headerMultiple')}</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-600">
+                    <Award className="w-4 h-4" />
+                    <span>{t('headerFeedback')}</span>
+                  </div>
+                </div>
+                 {/* Language dropdown */}
+                 <div className="relative mt-2 md:mt-0" ref={langDropdownRef}>
                   <button
                     type="button"
                     onClick={() => setLangOpen((o) => !o)}
@@ -79,21 +95,6 @@ export default function Home() {
                       ))}
                     </div>
                   )}
-                </div>
-
-                <div className="hidden md:flex items-center space-x-6">
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Target className="w-4 h-4" />
-                    <span>{t('header100')}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Clock className="w-4 h-4" />
-                    <span>{t('headerMultiple')}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Award className="w-4 h-4" />
-                    <span>{t('headerFeedback')}</span>
-                  </div>
                 </div>
               </div>
             </div>
