@@ -1,10 +1,12 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight, RotateCcw, SkipBack, SkipForward, List, Trophy } from 'lucide-react';
 import { useState } from 'react';
 
 export default function QuestionNavigation() {
+  const t = useTranslations('quizNav');
   const { 
     currentQuestionIndex, 
     totalQuestions, 
@@ -36,10 +38,10 @@ export default function QuestionNavigation() {
               onClick={prevQuestion}
               disabled={currentQuestionIndex === 0 || (quizCompleted && !reviewMode)}
               className="flex-1 sm:flex-none px-4 py-3 bg-light-100 hover:bg-light-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center gap-2"
-              aria-label="Previous question"
+              aria-label={t('previous')}
             >
               <ChevronLeft className="w-5 h-5" />
-              <span className="hidden xs:inline text-sm font-medium">Previous</span>
+              <span className="hidden xs:inline text-sm font-medium">{t('previous')}</span>
             </button>
             
             <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg">
@@ -53,9 +55,9 @@ export default function QuestionNavigation() {
               onClick={nextQuestion}
               disabled={currentQuestionIndex === totalQuestions - 1 || (quizCompleted && !reviewMode)}
               className="flex-1 sm:flex-none px-4 py-3 bg-light-100 hover:bg-light-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center gap-2"
-              aria-label="Next question"
+              aria-label={t('next')}
             >
-              <span className="hidden xs:inline text-sm font-medium">Next</span>
+              <span className="hidden xs:inline text-sm font-medium">{t('next')}</span>
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
@@ -102,7 +104,7 @@ export default function QuestionNavigation() {
                 className="flex-1 sm:flex-none px-4 py-3 bg-primary text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium"
               >
                 <Trophy className="w-5 h-5" />
-                <span className="text-sm">Back to Results</span>
+                <span className="text-sm">{t('backToResults')}</span>
               </button>
             )}
             
@@ -113,7 +115,7 @@ export default function QuestionNavigation() {
                 className="flex-1 sm:flex-none px-4 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium shadow-lg hover:shadow-xl"
               >
                 <Trophy className="w-5 h-5" />
-                <span className="text-sm font-semibold">Show Results 🎉</span>
+                <span className="text-sm font-semibold">{t('showResults')}</span>
               </button>
             )}
             
@@ -121,7 +123,7 @@ export default function QuestionNavigation() {
             {isLastQuestion && !quizCompleted && !allQuestionsAnswered && !reviewMode && (
               <div className="flex-1 sm:flex-none px-4 py-3 bg-amber-50 text-amber-800 rounded-sm border border-amber-200 flex items-center justify-center gap-2 font-medium">
                 <span className="text-sm font-semibold">
-                  {answeredCount}/{totalQuestions} Answered
+                  {t('answeredCount', { answered: answeredCount, total: totalQuestions })}
                 </span>
               </div>
             )}
@@ -131,9 +133,9 @@ export default function QuestionNavigation() {
               onClick={restartQuiz}
               className="flex-1 sm:flex-none px-4 py-3 bg-primary text-white hover:opacity-90 rounded-lg transition-all flex items-center justify-center gap-2 font-medium"
             >
-              <RotateCcw className="w-5 h-5" />
-              <span className="text-sm">Restart</span>
-            </button>
+                <RotateCcw className="w-5 h-5" />
+                <span className="text-sm">{t('restart')}</span>
+              </button>
           </div>
         </div>
 
@@ -147,13 +149,13 @@ export default function QuestionNavigation() {
             <p className="text-sm font-medium">
               {allQuestionsAnswered ? (
                 <>
-                  <span className="font-bold">🎉 All Questions Answered!</span>
-                  <span className="ml-2">Click &quot;Show Results&quot; to see your final score</span>
+                  <span className="font-bold">{t('allQuestionsAnswered')}</span>
+                  <span className="ml-2">{t('allAnsweredClick')}</span>
                 </>
               ) : (
                 <>
-                  <span className="font-bold">📝 {totalQuestions - answeredCount} questions left</span>
-                  <span className="ml-2">Answer all questions to see your results</span>
+                  <span className="font-bold">📝 {t('questionsLeft', { count: totalQuestions - answeredCount })}</span>
+                  <span className="ml-2">{t('answerAllToSee')}</span>
                 </>
               )}
             </p>
@@ -196,9 +198,9 @@ export default function QuestionNavigation() {
       {showQuestionList && (
         <div className="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-xl border border-light-300 p-4 z-10 animate-fade-in max-h-96 overflow-y-auto scrollbar-thin">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-bold text-dark-300">All Questions</h4>
+            <h4 className="font-bold text-dark-300">{t('allQuestions')}</h4>
             <div className="text-sm text-dark-200">
-              {answeredCount}/{totalQuestions} answered
+              {answeredCount}/{totalQuestions} {t('answeredShort')}
             </div>
           </div>
           
@@ -223,7 +225,7 @@ export default function QuestionNavigation() {
                           : 'bg-red-100 hover:bg-red-200 text-red-800'
                         : 'bg-light-100 hover:bg-light-200 text-dark-300'
                   }`}
-                  title={`Question ${index + 1}${isAnswered ? ` - ${isCorrect ? 'Correct' : 'Incorrect'}` : ' - Not answered'}`}
+                  title={`${index + 1}${isAnswered ? ` - ${isCorrect ? t('correct') : t('incorrect')}` : ` - ${t('notAnswered')}`}`}
                 >
                   <span className="font-bold text-sm">{index + 1}</span>
                   {isAnswered && (
@@ -234,10 +236,10 @@ export default function QuestionNavigation() {
                   
                   {/* Tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-dark-300 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
-                    Question {index + 1}
+                    {t('question')} {index + 1}
                     {isAnswered && (
                       <div className={`text-xs ${isCorrect ? 'text-green-300' : 'text-red-300'}`}>
-                        {isCorrect ? '✓ Correct' : '✗ Incorrect'}
+                        {isCorrect ? `✓ ${t('correct')}` : `✗ ${t('incorrect')}`}
                       </div>
                     )}
                   </div>
@@ -251,15 +253,15 @@ export default function QuestionNavigation() {
             <div className="grid grid-cols-3 gap-2 text-xs">
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded bg-primary"></div>
-                <span className="text-dark-300">Current</span>
+                <span className="text-dark-300">{t('current')}</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded bg-green-500"></div>
-                <span className="text-dark-300">Correct</span>
+                <span className="text-dark-300">{t('correct')}</span>
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-3 h-3 rounded bg-red-500"></div>
-                <span className="text-dark-300">Incorrect</span>
+                <span className="text-dark-300">{t('incorrect')}</span>
               </div>
             </div>
           </div>

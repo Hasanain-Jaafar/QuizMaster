@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import {
   Layers,
   FlaskConical,
@@ -30,7 +31,25 @@ function getCategoryIcon(id: string): LucideIcon {
   return CATEGORY_ICONS[id] ?? Lightbulb;
 }
 
+/** Map category id from quizData to i18n key in categories.* */
+function getCategoryKey(id: string): string {
+  const map: Record<string, string> = {
+    'all': 'all',
+    'Science': 'science',
+    'Geography': 'geography',
+    'History': 'history',
+    'Technology': 'technology',
+    'Entertainment': 'entertainment',
+    'Sports': 'sports',
+    'Food & Drink': 'foodAndDrink',
+    'General Knowledge': 'generalKnowledge',
+  };
+  return map[id] ?? id;
+}
+
 export default function CategorySelection() {
+  const t = useTranslations('category');
+  const tCat = useTranslations('categories');
   const { categories, startQuiz, gameMode, roomCode, updateRoom, resetToModeSelection } = useQuiz();
 
   const handlePick = async (categoryId: string) => {
@@ -46,10 +65,10 @@ export default function CategorySelection() {
     <div className="w-full max-w-4xl mx-auto">
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">
-          Choose a category
+          {t('chooseCategory')}
         </h2>
         <p className="text-dark-200 text-sm md:text-base">
-          Select a topic to start your quiz. You can also play across all categories.
+          {t('selectTopic')}
         </p>
       </div>
 
@@ -59,7 +78,7 @@ export default function CategorySelection() {
             onClick={resetToModeSelection}
             className="text-sm text-dark-200 hover:text-primary underline"
           >
-            ← Back to mode selection
+            {t('backToModeSelection')}
           </button>
         </div>
       )}
@@ -68,6 +87,7 @@ export default function CategorySelection() {
         {categories.map((cat) => {
           const Icon = getCategoryIcon(cat.id);
           const isAll = cat.id === 'all';
+          const label = tCat(getCategoryKey(cat.id));
 
           return (
             <button
@@ -93,8 +113,8 @@ export default function CategorySelection() {
                 <Icon className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-dark-300 truncate">{cat.name}</div>
-                <div className="text-sm text-dark-200">{cat.count} questions</div>
+                <div className="font-semibold text-dark-300 truncate">{label}</div>
+                <div className="text-sm text-dark-200">{t('questionsCount', { count: cat.count })}</div>
               </div>
             </button>
           );

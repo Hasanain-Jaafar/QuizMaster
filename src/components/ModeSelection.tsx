@@ -1,17 +1,19 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import { User, Users, PlusCircle, LogIn } from 'lucide-react';
 
 export default function ModeSelection() {
+  const t = useTranslations('modeSelection');
   const { setGameMode, multiplayerError, clearMultiplayerError } = useQuiz();
 
   return (
     <div className="w-full max-w-4xl mx-auto min-w-0">
       <div className="mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">Choose a game mode</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">{t('chooseGameMode')}</h2>
         <p className="text-dark-200 text-sm md:text-base">
-          Play alone or compete with a friend in 2-Player or via Room codes.
+          {t('subtitle')}
         </p>
       </div>
 
@@ -25,7 +27,7 @@ export default function ModeSelection() {
             type="button"
             onClick={clearMultiplayerError}
             className="shrink-0 px-2 py-1 text-amber-600 hover:bg-amber-100 rounded"
-            aria-label="Dismiss"
+            aria-label={t('dismiss')}
           >
             ×
           </button>
@@ -41,8 +43,8 @@ export default function ModeSelection() {
             <User className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0 overflow-hidden">
-            <div className="font-semibold text-dark-300 truncate">Solo</div>
-            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">Play by yourself</div>
+            <div className="font-semibold text-dark-300 truncate">{t('solo')}</div>
+            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">{t('playSolo')}</div>
           </div>
         </button>
 
@@ -54,8 +56,8 @@ export default function ModeSelection() {
             <Users className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0 overflow-hidden">
-            <div className="font-semibold text-dark-300 truncate">2-Player</div>
-            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">Two players, same device</div>
+            <div className="font-semibold text-dark-300 truncate">{t('2player')}</div>
+            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">{t('twoPlayersSameDevice')}</div>
           </div>
         </button>
 
@@ -67,8 +69,8 @@ export default function ModeSelection() {
             <PlusCircle className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0 overflow-hidden">
-            <div className="font-semibold text-dark-300 truncate">Create Room</div>
-            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">Create a room and share the code</div>
+            <div className="font-semibold text-dark-300 truncate">{t('createRoom')}</div>
+            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">{t('createRoomDesc')}</div>
           </div>
         </button>
 
@@ -80,8 +82,8 @@ export default function ModeSelection() {
             <LogIn className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0 overflow-hidden">
-            <div className="font-semibold text-dark-300 truncate">Join Room</div>
-            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">Enter a room code to join</div>
+            <div className="font-semibold text-dark-300 truncate">{t('joinRoom')}</div>
+            <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">{t('joinRoomDesc')}</div>
           </div>
         </button>
       </div>

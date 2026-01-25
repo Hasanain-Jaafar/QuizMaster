@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import { Loader2, LogIn } from 'lucide-react';
 
 const POLL_MS = 2500;
 
 export default function JoinRoomView() {
+  const t = useTranslations('joinRoom');
   const { joinRoom, getRoom, roomData, roomCode, setGameMode, startQuiz, clearMultiplayerError } = useQuiz();
   const [code, setCode] = useState('');
   const [joining, setJoining] = useState(false);
@@ -50,7 +52,7 @@ export default function JoinRoomView() {
     const result = await joinRoom(code);
     setJoining(false);
     if (!result.ok) {
-      setError(result.error || 'Failed to join');
+      setError(result.error || t('failedToJoin'));
     }
   };
 
@@ -65,9 +67,9 @@ export default function JoinRoomView() {
     return (
       <div className="w-full max-w-2xl mx-auto">
         <div className="mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">Join a room</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">{t('joinRoom')}</h2>
           <p className="text-dark-200 text-sm md:text-base">
-            Enter the 6-character code from the host.
+            {t('enterCode')}
           </p>
         </div>
 
@@ -85,7 +87,7 @@ export default function JoinRoomView() {
             placeholder="e.g. ABC123"
             className="flex-1 px-4 py-3 rounded-xl border-2 border-light-300 focus:border-primary focus:outline-none font-mono text-lg tracking-widest"
             maxLength={6}
-            aria-label="Room code"
+            aria-label={t('roomCode')}
           />
           <button
             onClick={handleJoin}
@@ -93,13 +95,13 @@ export default function JoinRoomView() {
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {joining ? <Loader2 className="w-5 h-5 animate-spin" /> : <LogIn className="w-5 h-5" />}
-            {joining ? 'Joining…' : 'Join'}
+            {joining ? t('joining') : t('join')}
           </button>
         </div>
 
         <div className="mt-6">
           <button onClick={handleBack} className="text-sm text-dark-200 hover:text-primary underline">
-            ← Back to mode selection
+            {t('backToModeSelection')}
           </button>
         </div>
       </div>
@@ -111,8 +113,8 @@ export default function JoinRoomView() {
     return (
       <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
         <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-        <p className="text-dark-200 text-center">Waiting for Player 1 to start…</p>
-        <p className="text-sm text-dark-100 mt-2">Room: {roomCode}</p>
+        <p className="text-dark-200 text-center">{t('waitingForP1')}</p>
+        <p className="text-sm text-dark-100 mt-2">{t('room')}: {roomCode}</p>
       </div>
     );
   }
@@ -121,7 +123,7 @@ export default function JoinRoomView() {
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
       <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-      <p className="text-dark-200">Starting quiz…</p>
+      <p className="text-dark-200">{t('startingQuiz')}</p>
     </div>
   );
 }

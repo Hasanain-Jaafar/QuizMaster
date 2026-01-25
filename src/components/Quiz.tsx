@@ -2,6 +2,7 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import CategorySelection from './CategorySelection';
 import ModeSelection from './ModeSelection';
 import PlayerSelect from './PlayerSelect';
@@ -11,7 +12,7 @@ import OptionButton from './OptionButton';
 import ProgressBar from './ProgressBar';
 import QuestionNavigation from './QuestionNavigation';
 import ScoreDisplay from './ScoreDisplay';
-import { HelpCircle, CheckCircle, Clock, Smartphone, Tablet, Monitor, AlertCircle, Trophy } from 'lucide-react';
+import { HelpCircle, CheckCircle, Clock, AlertCircle, Trophy } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function Quiz() {
@@ -56,6 +57,7 @@ export default function Quiz() {
 }
 
 function QuizRun() {
+  const t = useTranslations('quiz');
   const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions, reviewMode } = useQuiz();
   const [timeSpent, setTimeSpent] = useState(0);
 
@@ -90,18 +92,18 @@ function QuizRun() {
           {reviewMode && (
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-blue-800 text-sm font-medium text-center">
-                📖 Review Mode: You can review your answers but cannot change them
+                {t('reviewModeNote')}
               </p>
             </div>
           )}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
             <div className="flex-1">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark-300">
-                Question {currentQuestionIndex + 1} of {questions.length}
-                {isLastQuestion && <span className="ml-2 text-accent">(Last Question!)</span>}
+                {t('questionOf', { current: currentQuestionIndex + 1, total: questions.length })}
+                {isLastQuestion && <span className="ml-2 text-accent">{t('lastQuestion')}</span>}
               </h1>
               <p className="text-dark-200 mt-1 text-sm md:text-base">
-                {reviewMode ? 'Review your answer and the explanation below' : 'Select the correct answer from the three options below'}
+                {reviewMode ? t('reviewAnswer') : t('selectAnswer')}
               </p>
             </div>
             
@@ -117,14 +119,14 @@ function QuizRun() {
                 <span className="font-bold text-sm md:text-base">
                   {userAnswers.filter(a => a !== -1).length}/{questions.length}
                 </span>
-                <span className="text-sm md:text-base">Answered</span>
+                <span className="text-sm md:text-base">{t('answered')}</span>
               </div>
               
               {/* Last Question Indicator */}
               {isLastQuestion && (
                 <div className="flex items-center gap-2 px-3 py-2 bg-accent/20 text-accent rounded-lg border border-accent/30">
                   <Trophy className="w-4 h-4" />
-                  <span className="text-sm font-medium">Final Question!</span>
+                  <span className="text-sm font-medium">{t('finalQuestion')}</span>
                 </div>
               )}
             </div>
@@ -150,10 +152,10 @@ function QuizRun() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-3 py-1.5 bg-primary/10 text-primary text-xs md:text-sm font-semibold rounded-sm">
-                    Question {currentQuestionIndex + 1}
+                    {t('question')} {currentQuestionIndex + 1}
                   </span>
                   <span className="px-3 py-1.5 bg-secondary/10 text-primary text-xs md:text-sm font-semibold rounded-sm">
-                    3 Options
+                    {t('options3')}
                   </span>
                   {hasAnswered && (
                     <span className={`px-2 py-1 ${
@@ -161,12 +163,12 @@ function QuizRun() {
                         ? 'bg-green-100 text-green-700'
                         : 'bg-red-100 text-red-700'
                     } text-xs md:text-sm font-semibold rounded-sm`}>
-                      {userAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect'}
+                      {userAnswer === currentQuestion.correctAnswer ? t('correct') : t('incorrect')}
                     </span>
                   )}
                   {isLastQuestion && (
                     <span className="px-2 py-1 bg-accent/10 text-accent text-xs md:text-sm font-semibold rounded-lg">
-                      Final Question
+                      {t('finalQuestion')}
                     </span>
                   )}
                 </div>
@@ -202,8 +204,6 @@ function QuizRun() {
             })}
           </div>
 
-          
-
           {/* Answer Feedback Section */}
           {hasAnswered && (
             <div className={`mt-6 md:mt-10 p-4 md:p-6 rounded-xl md:rounded-xl border ${
@@ -227,11 +227,11 @@ function QuizRun() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-lg md:text-xl font-bold text-dark-300">
-                      {userAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Not Quite Right'}
+                      {userAnswer === currentQuestion.correctAnswer ? t('correct') : t('notQuiteRight')}
                     </h3>
                     {userAnswer !== currentQuestion.correctAnswer && (
                       <span className="px-3 py-1 bg-accent text-white text-sm font-semibold rounded-sm">
-                        Try Again Next Time!
+                        {t('tryAgain')}
                       </span>
                     )}
                   </div>
@@ -240,8 +240,8 @@ function QuizRun() {
                     <>
                       <p className="text-dark-200 mb-3">
                         {userAnswer === currentQuestion.correctAnswer 
-                          ? 'You selected the correct answer. Great job!'
-                          : 'Your answer was incorrect. Here\'s why:'}
+                          ? t('correctExplanation')
+                          : t('incorrectExplanation')}
                       </p>
                       <div className="p-4 bg-white/50 rounded-lg border border-light-300">
                         <p className="text-dark-300 font-medium">
@@ -263,10 +263,10 @@ function QuizRun() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg md:text-xl font-bold text-emerald-800 mb-2">
-                    🎉 All Questions Answered!
+                    {t('allAnswered')}
                   </h3>
                   <p className="text-emerald-700">
-                    You&apos;ve answered all {totalQuestions} questions. Click &quot;Show Results&quot; to see your final score and detailed feedback.
+                    {t('showResultsPrompt', { total: totalQuestions })}
                   </p>
                 </div>
               </div>

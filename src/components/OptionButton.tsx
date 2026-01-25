@@ -2,7 +2,8 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
-import { Check, X, Circle, AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Check, X } from 'lucide-react';
 import { useState } from 'react';
 
 interface OptionButtonProps {
@@ -11,6 +12,7 @@ interface OptionButtonProps {
 }
 
 export default function OptionButton({ option, index }: OptionButtonProps) {
+  const t = useTranslations('optionButton');
   const { 
     currentQuestionIndex, 
     userAnswers, 
@@ -107,7 +109,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
             ? 'bg-green-100 text-green-700'
             : 'bg-red-100 text-red-700'
         }`}>
-          {isCorrect ? 'Correct!' : 'Incorrect'}
+          {isCorrect ? t('correct') : t('incorrect')}
         </span>
       );
     }
@@ -115,7 +117,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
     if (isCorrect) {
       return (
         <span className="px-3 py-1.5 bg-green-100 text-green-700 rounded-full text-xs md:text-sm font-semibold">
-          Correct Answer
+          {t('correctAnswer')}
         </span>
       );
     }

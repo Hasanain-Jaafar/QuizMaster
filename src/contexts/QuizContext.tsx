@@ -1,6 +1,7 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
+import { useLocale } from 'next-intl';
 import { QuizState, QuizQuestion, GameMode, SelectedPlayer, RoomData, PlayerScores } from '@/types/quiz';
 import { getCategories, getQuestionsByCategory } from '@/data/quizData';
 
@@ -66,7 +67,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const [playerScores, setPlayerScores] = useState<PlayerScores | null>(null);
   const [multiplayerError, setMultiplayerError] = useState<string | null>(null);
 
-  const categories = getCategories();
+  const locale = useLocale();
+  const categories = useMemo(() => getCategories(locale), [locale]);
 
   const clearMultiplayerError = useCallback(() => setMultiplayerError(null), []);
 
@@ -217,7 +219,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const startQuiz = (categoryId: string) => {
-    const filtered = getQuestionsByCategory(categoryId);
+    const filtered = getQuestionsByCategory(categoryId, locale);
     setCurrentQuestions(filtered);
     setSelectedCategory(categoryId);
     setQuizState({

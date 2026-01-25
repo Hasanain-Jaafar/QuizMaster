@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import { Copy, Check, Loader2, ArrowRight } from 'lucide-react';
 
 export default function CreateRoomView() {
+  const t = useTranslations('createRoom');
   const {
     createRoom,
     roomCode,
@@ -40,7 +42,7 @@ export default function CreateRoomView() {
     return (
       <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
         <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-        <p className="text-dark-200">Creating room…</p>
+        <p className="text-dark-200">{t('creatingRoom')}</p>
       </div>
     );
   }
@@ -52,18 +54,18 @@ export default function CreateRoomView() {
   return (
     <div className="w-full max-w-2xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">Room created</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">{t('roomCreated')}</h2>
         <p className="text-dark-200 text-sm md:text-base">
-          Share this code with the other player. When both are ready, pick a category and start.
+          {t('shareCode')}
         </p>
       </div>
 
       <div className="p-6 bg-white rounded-xl border-2 border-primary/20 shadow-sm">
-        <p className="text-sm text-dark-200 mb-2">Room code</p>
+        <p className="text-sm text-dark-200 mb-2">{t('roomCode')}</p>
         <div className="flex items-center gap-3">
           <span
             className="text-2xl md:text-3xl font-mono font-bold tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-lg"
-            aria-label={`Room code: ${roomCode}`}
+            aria-label={`${t('roomCode')}: ${roomCode}`}
           >
             {roomCode}
           </span>
@@ -71,10 +73,10 @@ export default function CreateRoomView() {
             type="button"
             onClick={copyCode}
             className="p-2 rounded-lg border border-light-300 hover:bg-primary/5 hover:border-primary/30 flex items-center gap-2"
-            aria-label="Copy room code"
+            aria-label={t('copy')}
           >
             {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-dark-200" />}
-            <span className="text-sm font-medium">{copied ? 'Copied!' : 'Copy'}</span>
+            <span className="text-sm font-medium">{copied ? t('copied') : t('copy')}</span>
           </button>
         </div>
       </div>
@@ -84,14 +86,14 @@ export default function CreateRoomView() {
           onClick={() => setCreateRoomContinued(true)}
           className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90 transition-colors"
         >
-          Pick category and start
+          {t('pickCategoryAndStart')}
           <ArrowRight className="w-5 h-5" />
         </button>
         <button
           onClick={() => setGameMode(null)}
           className="text-sm text-dark-200 hover:text-primary underline"
         >
-          Cancel
+          {t('cancel')}
         </button>
       </div>
     </div>

@@ -3,11 +3,13 @@
 
 import { useEffect, useRef } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
+import { useTranslations } from 'next-intl';
 import { Trophy, CheckCircle, XCircle, Eye, RotateCcw, Loader2, Users } from 'lucide-react';
 
 const POLL_MS = 2500;
 
 export default function ScoreDisplay() {
+  const t = useTranslations('score');
   const {
     score,
     totalQuestions,
@@ -49,10 +51,10 @@ export default function ScoreDisplay() {
   useEffect(() => {
     if (gameMode !== 'create_room' && gameMode !== 'join_room') return;
     if (roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) return;
-    const t = setInterval(() => {
+    const id = setInterval(() => {
       getRoom();
     }, POLL_MS);
-    return () => clearInterval(t);
+    return () => clearInterval(id);
   }, [gameMode, roomData?.status, roomData?.player1, roomData?.player2, getRoom]);
 
   // 2-Player: save and load scores once
@@ -68,45 +70,41 @@ export default function ScoreDisplay() {
   if (!quizCompleted) return null;
 
   const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
-  const correctAnswers = score;
-  const incorrectAnswers = totalQuestions - score;
   
   const getPerformance = () => {
     if (percentage >= 90) return { 
-      message: "Perfect Score! 🎯", 
+      messageKey: 'perfectMessage' as const,
+      feedbackKey: 'perfectFeedback' as const,
       color: "from-primary to-secondary",
       bgColor: "bg-gradient-to-br from-primary/5 to-secondary/5",
       borderColor: "border-primary/30",
-      icon: "🏆",
-      feedback: "Outstanding performance! You're a quiz master!"
     };
     if (percentage >= 70) return { 
-      message: "Great Job! ✨", 
+      messageKey: 'greatMessage' as const,
+      feedbackKey: 'greatFeedback' as const,
       color: "from-green-500 to-emerald-500",
       bgColor: "bg-gradient-to-br from-green-50 to-emerald-50",
       borderColor: "border-green-200",
-      icon: "🌟",
-      feedback: "Excellent work! You really know your stuff!"
     };
     if (percentage >= 50) return { 
-      message: "Good Effort! 👍", 
+      messageKey: 'goodMessage' as const,
+      feedbackKey: 'goodFeedback' as const,
       color: "from-blue-500 to-cyan-500",
       bgColor: "bg-gradient-to-br from-blue-50 to-cyan-50",
       borderColor: "border-blue-200",
-      icon: "💪",
-      feedback: "Good job! Keep learning and you'll improve even more!"
     };
     return { 
-      message: "Keep Learning! 📚", 
+      messageKey: 'keepMessage' as const,
+      feedbackKey: 'keepFeedback' as const,
       color: "from-accent to-amber-700",
       bgColor: "bg-gradient-to-br from-accent/5 to-amber-50",
       borderColor: "border-accent/20",
-      icon: "🎯",
-      feedback: "Every attempt is a learning opportunity. Try again!"
     };
   };
 
   const performance = getPerformance();
+  const performanceMessage = t(`performance.${performance.messageKey}`);
+  const performanceFeedback = t(`performance.${performance.feedbackKey}`);
 
   return (
     <div className={`${performance.bgColor} rounded-xl md:rounded-xl p-6 md:p-8 border ${performance.borderColor} animate-slide-up`}>
@@ -118,13 +116,13 @@ export default function ScoreDisplay() {
               <Trophy className="w-10 h-10 md:w-12 md:h-12 text-white" />
             </div>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-dark-300">
-              Quiz Completed!
+              {t('quizCompleted')}
             </h2>
             <p className={`text-xl md:text-2xl font-semibold ${performance.color} bg-clip-text text-transparent mb-2`}>
-              {performance.message}
+              {performanceMessage}
             </p>
             <p className="text-dark-200 mx-auto">
-              {performance.feedback}
+              {performanceFeedback}
             </p>
           </div>
         </div>
@@ -134,14 +132,14 @@ export default function ScoreDisplay() {
           <div className="p-4 md:p-5 bg-white/60 rounded-xl border border-primary/20">
             <h3 className="flex items-center gap-2 font-semibold text-dark-300 mb-3">
               <Users className="w-5 h-5 text-primary" />
-              Scores
+              {t('scores')}
             </h3>
-            <p className="text-dark-200 mb-2">Your score: <strong>{score}/{totalQuestions}</strong></p>
+            <p className="text-dark-200 mb-2">{t('yourScore')} <strong>{score}/{totalQuestions}</strong></p>
             <div className="flex flex-wrap gap-4 text-sm">
-              <span>Player 1: {playerScores?.player1?.history?.length
+              <span>{t('player1Label')} {playerScores?.player1?.history?.length
                 ? `${playerScores.player1.history.slice(-1)[0].score}/${playerScores.player1.history.slice(-1)[0].total}`
                 : '—'}</span>
-              <span>Player 2: {playerScores?.player2?.history?.length
+              <span>{t('player2Label')} {playerScores?.player2?.history?.length
                 ? `${playerScores.player2.history.slice(-1)[0].score}/${playerScores.player2.history.slice(-1)[0].total}`
                 : '—'}</span>
             </div>
@@ -153,17 +151,17 @@ export default function ScoreDisplay() {
           <div className="p-4 md:p-5 bg-white/60 rounded-xl border border-primary/20">
             <h3 className="flex items-center gap-2 font-semibold text-dark-300 mb-3">
               <Users className="w-5 h-5 text-primary" />
-              Room results
+              {t('roomResults')}
             </h3>
             {(roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) ? (
               <div className="flex flex-wrap gap-4 text-sm">
-                <span>Player 1: {roomData?.player1 ? `${roomData.player1.score}/${roomData.player1.total}` : '—'}</span>
-                <span>Player 2: {roomData?.player2 ? `${roomData.player2.score}/${roomData.player2.total}` : '—'}</span>
+                <span>{t('player1Label')} {roomData?.player1 ? `${roomData.player1.score}/${roomData.player1.total}` : '—'}</span>
+                <span>{t('player2Label')} {roomData?.player2 ? `${roomData.player2.score}/${roomData.player2.total}` : '—'}</span>
               </div>
             ) : (
               <p className="text-dark-200 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Waiting for the other player…
+                {t('waitingForOtherPlayer')}
               </p>
             )}
           </div>
@@ -172,8 +170,8 @@ export default function ScoreDisplay() {
         {/* Question Review Grid */}
         <div className="pt-8 border-t border-gray-200">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-dark-300">Question Review</h3>
-            <p className="text-dark-200 text-sm">Click any question to review your answer</p>
+            <h3 className="text-xl font-bold text-dark-300">{t('questionReview')}</h3>
+            <p className="text-dark-200 text-sm">{t('clickToReview')}</p>
           </div>
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
@@ -196,7 +194,7 @@ export default function ScoreDisplay() {
                         : 'bg-red-50 border border-red-200 hover:bg-red-100'
                       : 'bg-gray-50 border border-gray-200 hover:bg-gray-100'
                   }`}
-                  title={`Question ${index + 1}: ${isAnswered ? (isCorrect ? 'Correct' : 'Incorrect') : 'Not answered'}`}
+                  title={`${index + 1}: ${isAnswered ? (isCorrect ? t('correct') : t('wrong')) : t('unanswered')}`}
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                     isAnswered
@@ -226,10 +224,10 @@ export default function ScoreDisplay() {
                           ) : (
                             <XCircle className="w-3 h-3" />
                           )}
-                          <span>{isCorrect ? 'Correct' : 'Wrong'}</span>
+                          <span>{isCorrect ? t('correct') : t('wrong')}</span>
                         </>
                       ) : (
-                        <span>Unanswered</span>
+                        <span>{t('unanswered')}</span>
                       )}
                     </div>
                   </div>
@@ -237,7 +235,7 @@ export default function ScoreDisplay() {
                   {/* Answer indicator */}
                   {isAnswered && (
                     <div className="text-xs text-dark-300 font-medium">
-                      Your: {String.fromCharCode(65 + userAnswer)}
+                      {t('your')} {String.fromCharCode(65 + userAnswer)}
                     </div>
                   )}
                 </button>
@@ -249,15 +247,15 @@ export default function ScoreDisplay() {
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-green-500"></div>
-                <span className="text-sm text-dark-300">Correct Answer</span>
+                <span className="text-sm text-dark-300">{t('correctAnswer')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                <span className="text-sm text-dark-300">Incorrect Answer</span>
+                <span className="text-sm text-dark-300">{t('incorrectAnswer')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-gray-400"></div>
-                <span className="text-sm text-dark-300">Not Answered</span>
+                <span className="text-sm text-dark-300">{t('notAnswered')}</span>
               </div>
             </div>
           </div>
@@ -270,7 +268,7 @@ export default function ScoreDisplay() {
             className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
           >
             <Eye className="w-5 h-5" />
-            Review All Questions
+            {t('reviewAllQuestions')}
           </button>
           
           <button
@@ -278,7 +276,7 @@ export default function ScoreDisplay() {
             className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
-            Play Again
+            {t('playAgain')}
           </button>
         </div>
       </div>
