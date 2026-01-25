@@ -22,7 +22,7 @@ export default async function RootLayout({
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
   return (
     <html lang={locale} dir={dir}>
-      <body className={inter.className}>
+      <body className={locale === 'ar' ? 'font-zain' : inter.className}>
         {children}
       </body>
     </html>

@@ -2,6 +2,70 @@
 
 @import 'tailwindcss';
 
+/* Zain font for Arabic (ar) locale – files in public/fonts/ */
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-ExtraLight.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Zain";
+  src: url("/fonts/Zain-Black.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-zain {
+  font-family: "Zain", sans-serif;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
 /* Define your custom theme using CSS variables */
 @theme {
   /* Custom color palette using your specified colors */

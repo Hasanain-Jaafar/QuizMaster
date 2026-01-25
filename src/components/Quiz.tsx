@@ -12,8 +12,7 @@ import OptionButton from './OptionButton';
 import ProgressBar from './ProgressBar';
 import QuestionNavigation from './QuestionNavigation';
 import ScoreDisplay from './ScoreDisplay';
-import { HelpCircle, CheckCircle, Clock, AlertCircle, Trophy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { HelpCircle, CheckCircle, AlertCircle, Trophy } from 'lucide-react';
 
 export default function Quiz() {
   const {
@@ -59,25 +58,6 @@ export default function Quiz() {
 function QuizRun() {
   const t = useTranslations('quiz');
   const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions, reviewMode } = useQuiz();
-  const [timeSpent, setTimeSpent] = useState(0);
-
-  // Timer: only run the interval when quiz is in progress (not completed).
-  // setState runs inside the interval callback (async), not in the effect body.
-  useEffect(() => {
-    if (quizCompleted) return;
-
-    const id = setInterval(() => {
-      setTimeSpent((prev) => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(id);
-  }, [quizCompleted]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const currentQuestion = questions[currentQuestionIndex];
   const userAnswer = userAnswers[currentQuestionIndex];
@@ -108,13 +88,6 @@ function QuizRun() {
             </div>
             
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-light-300 shadow-sm">
-                <Clock className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                <span className="font-semibold text-dark-300 text-sm md:text-base">
-                  {formatTime(timeSpent)}
-                </span>
-              </div>
-              
               <div className="flex items-center gap-2 px-3 py-2 bg-primary text-white rounded-lg shadow-md">
                 <span className="font-bold text-sm md:text-base">
                   {userAnswers.filter(a => a !== -1).length}/{questions.length}

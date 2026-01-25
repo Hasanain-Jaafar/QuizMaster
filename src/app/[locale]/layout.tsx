@@ -26,7 +26,9 @@ export default async function LocaleLayout({ children, params }: Props) {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return (
       <NextIntlClientProvider locale={locale} messages={messages} now={now} timeZone={timeZone}>
-        {children}
+        <div className={locale === 'ar' ? 'font-zain' : ''}>
+          {children}
+        </div>
       </NextIntlClientProvider>
     );
   } catch (e) {

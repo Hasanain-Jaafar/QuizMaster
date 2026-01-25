@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Brain, Target, Clock, Award, ChevronDown, ChevronUp, Globe } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 
-const LANG_NAMES: Record<string, string> = { en: 'English', ar: 'العربية', sv: 'Svenska' };
+const LANG_NAMES: Record<string, string> = { en: 'En', ar: 'Ar', sv: 'Sv' };
 
 export default function Home() {
   const t = useTranslations('home');
@@ -67,7 +67,7 @@ export default function Home() {
                     aria-expanded={langOpen}
                     aria-haspopup="listbox"
                     aria-label={t('language')}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors"
+                    className="flex items-center gap-1 px-2 py-2 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-sm font-medium text-gray-700 transition-colors"
                   >
                     <Globe className="w-4 h-4 text-gray-500" />
                     <span>{LANG_NAMES[locale] ?? locale}</span>
