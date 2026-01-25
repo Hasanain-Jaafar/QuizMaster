@@ -4,6 +4,8 @@ export interface QuizQuestion {
     options: string[];
     correctAnswer: number; 
     explanation?: string;
+    category:string;
+    difficulty:string;
   }
   
   export interface QuizState {

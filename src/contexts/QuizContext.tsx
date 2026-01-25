@@ -1,35 +1,55 @@
-
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { QuizState } from '@/types/quiz';
-import { quizQuestions } from '@/data/quizData';
+import { QuizQuestion } from '@/types/quiz';
+import { getCategories, getQuestionsByCategory } from '@/data/quizData';
 
 interface QuizContextType extends QuizState {
   totalQuestions: number;
-  questions: typeof quizQuestions;
+  questions: QuizQuestion[];
   selectAnswer: (optionIndex: number) => void;
   nextQuestion: () => void;
   prevQuestion: () => void;
   restartQuiz: () => void;
   goToQuestion: (index: number) => void;
-  showResults: () => void; // New function to show results
-  isAnswerLocked: (questionIndex: number) => boolean; // Check if answer is locked
-  reviewMode: boolean; // Whether we're in review mode
-  enterReviewMode: () => void; // Enter review mode to review questions
-  exitReviewMode: () => void; // Exit review mode back to results
+  showResults: () => void;
+  isAnswerLocked: (questionIndex: number) => boolean;
+  reviewMode: boolean;
+  enterReviewMode: () => void;
+  exitReviewMode: () => void;
+  selectedCategory: string | null;
+  categories: { id: string; name: string; count: number }[];
+  startQuiz: (categoryId: string) => void;
 }
 
 const QuizContext = createContext<QuizContextType | undefined>(undefined);
 
 export function QuizProvider({ children }: { children: ReactNode }) {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
   const [quizState, setQuizState] = useState<QuizState>({
     currentQuestionIndex: 0,
     score: 0,
-    userAnswers: Array(quizQuestions.length).fill(-1),
+    userAnswers: [] as number[],
     quizCompleted: false,
   });
   const [reviewMode, setReviewMode] = useState(false);
+
+  const categories = getCategories();
+
+  const startQuiz = (categoryId: string) => {
+    const filtered = getQuestionsByCategory(categoryId);
+    setCurrentQuestions(filtered);
+    setSelectedCategory(categoryId);
+    setQuizState({
+      currentQuestionIndex: 0,
+      score: 0,
+      userAnswers: Array(filtered.length).fill(-1),
+      quizCompleted: false,
+    });
+    setReviewMode(false);
+  };
 
   const selectAnswer = (optionIndex: number) => {
     if (quizState.quizCompleted || quizState.userAnswers[quizState.currentQuestionIndex] !== -1) {
@@ -39,10 +59,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     setQuizState(prev => {
       const newUserAnswers = [...prev.userAnswers];
       newUserAnswers[prev.currentQuestionIndex] = optionIndex;
-      
-      const isCorrect = optionIndex === quizQuestions[prev.currentQuestionIndex].correctAnswer;
+      const isCorrect = optionIndex === currentQuestions[prev.currentQuestionIndex].correctAnswer;
       const newScore = isCorrect ? prev.score + 1 : prev.score;
-      
       return {
         ...prev,
         userAnswers: newUserAnswers,
@@ -52,7 +70,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   };
 
   const nextQuestion = () => {
-    if (quizState.currentQuestionIndex < quizQuestions.length - 1) {
+    if (quizState.currentQuestionIndex < currentQuestions.length - 1) {
       setQuizState(prev => ({
         ...prev,
         currentQuestionIndex: prev.currentQuestionIndex + 1,
@@ -85,17 +103,19 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   };
 
   const restartQuiz = () => {
+    setSelectedCategory(null);
+    setCurrentQuestions([]);
     setQuizState({
       currentQuestionIndex: 0,
       score: 0,
-      userAnswers: Array(quizQuestions.length).fill(-1),
+      userAnswers: [],
       quizCompleted: false,
     });
     setReviewMode(false);
   };
 
   const goToQuestion = (index: number) => {
-    if (index >= 0 && index < quizQuestions.length) {
+    if (index >= 0 && index < currentQuestions.length) {
       setQuizState(prev => ({
         ...prev,
         currentQuestionIndex: index,
@@ -122,8 +142,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
 
   const value: QuizContextType = {
     ...quizState,
-    totalQuestions: quizQuestions.length,
-    questions: quizQuestions,
+    totalQuestions: currentQuestions.length,
+    questions: currentQuestions,
     selectAnswer,
     nextQuestion,
     prevQuestion,
@@ -134,6 +154,9 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     reviewMode,
     enterReviewMode,
     exitReviewMode,
+    selectedCategory,
+    categories,
+    startQuiz,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

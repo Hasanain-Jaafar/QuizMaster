@@ -2,6 +2,7 @@
 'use client';
 
 import { useQuiz } from '@/contexts/QuizContext';
+import CategorySelection from './CategorySelection';
 import OptionButton from './OptionButton';
 import ProgressBar from './ProgressBar';
 import QuestionNavigation from './QuestionNavigation';
@@ -10,40 +11,11 @@ import { HelpCircle, CheckCircle, Clock, Smartphone, Tablet, Monitor, AlertCircl
 import { useEffect, useState } from 'react';
 
 export default function Quiz() {
-  const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions, reviewMode } = useQuiz();
-  const [timeSpent, setTimeSpent] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(0);
-  
-  const currentQuestion = questions[currentQuestionIndex];
-  const userAnswer = userAnswers[currentQuestionIndex];
-  const hasAnswered = userAnswer !== -1;
-  const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
-  const allAnswered = userAnswers.every(answer => answer !== -1);
+  const { quizCompleted, reviewMode, selectedCategory } = useQuiz();
 
-  // Responsive window width tracking
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Timer effect
-  useEffect(() => {
-    if (quizCompleted) return;
-    
-    const timer = setInterval(() => {
-      setTimeSpent(prev => prev + 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [quizCompleted]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  if (selectedCategory === null) {
+    return <CategorySelection />;
+  }
 
   // Show score display only if quiz is completed and not in review mode
   if (quizCompleted && !reviewMode) {
@@ -59,6 +31,38 @@ export default function Quiz() {
     );
   }
 
+  return (
+    <QuizRun key={selectedCategory} />
+  );
+}
+
+function QuizRun() {
+  const { currentQuestionIndex, questions, userAnswers, quizCompleted, isAnswerLocked, totalQuestions, reviewMode } = useQuiz();
+  const [timeSpent, setTimeSpent] = useState(0);
+
+  // Timer: only run the interval when quiz is in progress (not completed).
+  // setState runs inside the interval callback (async), not in the effect body.
+  useEffect(() => {
+    if (quizCompleted) return;
+
+    const id = setInterval(() => {
+      setTimeSpent((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(id);
+  }, [quizCompleted]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const userAnswer = userAnswers[currentQuestionIndex];
+  const hasAnswered = userAnswer !== -1;
+  const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+  const allAnswered = userAnswers.every(answer => answer !== -1);
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="space-y-6 md:space-y-8 animate-fade-in">

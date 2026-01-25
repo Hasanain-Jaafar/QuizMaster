@@ -5,7 +5,7 @@ import { useQuiz } from '@/contexts/QuizContext';
 import { Trophy, Sparkles, CheckCircle, XCircle, Eye, RotateCcw } from 'lucide-react';
 
 export default function ScoreDisplay() {
-  const { score, totalQuestions, quizCompleted, questions, userAnswers, goToQuestion, enterReviewMode } = useQuiz();
+  const { score, totalQuestions, quizCompleted, questions, userAnswers, goToQuestion, enterReviewMode, restartQuiz } = useQuiz();
   
   if (!quizCompleted) return null;
 
@@ -181,11 +181,8 @@ export default function ScoreDisplay() {
           </button>
           
           <button
-            onClick={() => {
-              // Restart quiz function
-              window.location.reload(); // Or use your restart function
-            }}
-            className="px-6 py-3   bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+            onClick={restartQuiz}
+            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
           >
             <RotateCcw className="w-5 h-5" />
             Play Again

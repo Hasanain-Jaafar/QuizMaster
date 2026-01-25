@@ -2,9 +2,12 @@
 
 import Quiz from '@/components/Quiz';
 import { QuizProvider } from '@/contexts/QuizContext';
-import { Brain, Target, Clock, Award } from 'lucide-react';
+import { Brain, Target, Clock, Award, ChevronDown, ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 
 export default function Home() {
+  const [instructionsOpen, setInstructionsOpen] = useState(true);
+
   return (
     <QuizProvider>
       <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50">
@@ -55,45 +58,75 @@ export default function Home() {
             {/* Sidebar */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quiz Instructions</h3>
-                <ul className="space-y-4">
-                  <li className="flex items-start space-x-3">
-                    <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">1</span>
-                    </div>
-                    <span className="text-gray-600">Read each question carefully</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">2</span>
-                    </div>
-                    <span className="text-gray-600">Select one of the three options</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">3</span>
-                    </div>
-                    <span className="text-gray-600">Get immediate feedback on your answer</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">4</span>
-                    </div>
-                    <span className="text-gray-600">Navigate between questions freely</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                      <span className="text-blue-600 text-sm font-bold">5</span>
-                    </div>
-                    <span className="text-gray-600">View your final score at the end</span>
-                  </li>
-                </ul>
+                <button
+                  type="button"
+                  onClick={() => setInstructionsOpen((o) => !o)}
+                  className="w-full flex items-center justify-between text-left gap-2 group"
+                  aria-expanded={instructionsOpen}
+                  aria-controls="quiz-instructions-content"
+                  id="quiz-instructions-toggle"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    Quiz Instructions
+                  </h3>
+                  <span className="shrink-0 p-1 rounded-lg text-gray-500 group-hover:bg-gray-100 transition-colors">
+                    {instructionsOpen ? (
+                      <ChevronUp className="w-5 h-5" aria-hidden />
+                    ) : (
+                      <ChevronDown className="w-5 h-5" aria-hidden />
+                    )}
+                  </span>
+                </button>
 
-                <div className="mt-8 p-4 bg-linear-to-r from-blue-50 to-purple-50 rounded-xl">
-                  <h4 className="font-semibold text-gray-900 mb-2">Quick Tips</h4>
-                  <p className="text-sm text-gray-600">
-                    Take your time with each question. You can always go back and review your answers before finishing.
-                  </p>
+                <div
+                  id="quiz-instructions-content"
+                  role="region"
+                  aria-labelledby="quiz-instructions-toggle"
+                  className={`grid transition-[grid-template-rows] duration-200 ease-in-out ${
+                    instructionsOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <ul className="space-y-4 mt-4">
+                      <li className="flex items-start space-x-3">
+                        <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-sm font-bold">1</span>
+                        </div>
+                        <span className="text-gray-600">Read each question carefully</span>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-sm font-bold">2</span>
+                        </div>
+                        <span className="text-gray-600">Select one of the three options</span>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-sm font-bold">3</span>
+                        </div>
+                        <span className="text-gray-600">Get immediate feedback on your answer</span>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-sm font-bold">4</span>
+                        </div>
+                        <span className="text-gray-600">Navigate between questions freely</span>
+                      </li>
+                      <li className="flex items-start space-x-3">
+                        <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <span className="text-blue-600 text-sm font-bold">5</span>
+                        </div>
+                        <span className="text-gray-600">View your final score at the end</span>
+                      </li>
+                    </ul>
+
+                    <div className="mt-8 p-4 bg-linear-to-r from-blue-50 to-purple-50 rounded-xl">
+                      <h4 className="font-semibold text-gray-900 mb-2">Quick Tips</h4>
+                      <p className="text-sm text-gray-600">
+                        Take your time with each question. You can always go back and review your answers before finishing.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
