@@ -60,7 +60,7 @@ export default function Home() {
                   {langOpen && (
                     <div
                       role="listbox"
-                      className="absolute top-full start-0 mt-1 min-w-[11rem] rounded-lg border border-gray-200 bg-white shadow-lg py-1 z-50"
+                      className="absolute top-full start-0 mt-1 min-w-44 rounded-lg border border-gray-200 bg-white shadow-lg py-1 z-50"
                     >
                       {(['en', 'ar', 'sv'] as const).map((loc) => (
                         <Link
