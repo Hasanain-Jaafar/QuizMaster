@@ -132,7 +132,7 @@ export default function Home() {
             </div>
 
             {/* Quiz Area */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 min-w-0">
               <Quiz />
             </div>
           </div>

@@ -3,6 +3,10 @@
 
 import { useQuiz } from '@/contexts/QuizContext';
 import CategorySelection from './CategorySelection';
+import ModeSelection from './ModeSelection';
+import PlayerSelect from './PlayerSelect';
+import CreateRoomView from './CreateRoomView';
+import JoinRoomView from './JoinRoomView';
 import OptionButton from './OptionButton';
 import ProgressBar from './ProgressBar';
 import QuestionNavigation from './QuestionNavigation';
@@ -11,9 +15,26 @@ import { HelpCircle, CheckCircle, Clock, Smartphone, Tablet, Monitor, AlertCircl
 import { useEffect, useState } from 'react';
 
 export default function Quiz() {
-  const { quizCompleted, reviewMode, selectedCategory } = useQuiz();
+  const {
+    quizCompleted,
+    reviewMode,
+    selectedCategory,
+    gameMode,
+    selectedPlayer,
+    roomCode,
+    createRoomContinued,
+  } = useQuiz();
 
+  // Not in a quiz: show mode selection, player select, create/join room, or category selection
   if (selectedCategory === null) {
+    if (gameMode === null) return <ModeSelection />;
+    if (gameMode === '2player' && selectedPlayer === null) return <PlayerSelect />;
+    if (gameMode === 'create_room') {
+      if (roomCode && createRoomContinued) return <CategorySelection />;
+      return <CreateRoomView />;
+    }
+    if (gameMode === 'join_room') return <JoinRoomView />;
+    // solo, or 2player with selectedPlayer
     return <CategorySelection />;
   }
 
@@ -31,9 +52,7 @@ export default function Quiz() {
     );
   }
 
-  return (
-    <QuizRun key={selectedCategory} />
-  );
+  return <QuizRun key={selectedCategory} />;
 }
 
 function QuizRun() {

@@ -31,7 +31,16 @@ function getCategoryIcon(id: string): LucideIcon {
 }
 
 export default function CategorySelection() {
-  const { categories, startQuiz } = useQuiz();
+  const { categories, startQuiz, gameMode, roomCode, updateRoom, resetToModeSelection } = useQuiz();
+
+  const handlePick = async (categoryId: string) => {
+    if (gameMode === 'create_room' && roomCode) {
+      const ok = await updateRoom({ category: categoryId, status: 'started' });
+      if (ok) startQuiz(categoryId);
+    } else {
+      startQuiz(categoryId);
+    }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -44,6 +53,17 @@ export default function CategorySelection() {
         </p>
       </div>
 
+      {(gameMode === 'solo' || gameMode === '2player' || gameMode === 'create_room') && (
+        <div className="mb-4">
+          <button
+            onClick={resetToModeSelection}
+            className="text-sm text-dark-200 hover:text-primary underline"
+          >
+            ← Back to mode selection
+          </button>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         {categories.map((cat) => {
           const Icon = getCategoryIcon(cat.id);
@@ -52,7 +72,7 @@ export default function CategorySelection() {
           return (
             <button
               key={cat.id}
-              onClick={() => startQuiz(cat.id)}
+              onClick={() => handlePick(cat.id)}
               className={`
                 p-4 md:p-5 rounded-xl text-left transition-all
                 flex items-center gap-4

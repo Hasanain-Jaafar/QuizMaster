@@ -1,15 +1,73 @@
-// src/components/ScoreDisplay.tsx - Add this new section after the stats grid
+// src/components/ScoreDisplay.tsx
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
-import { Trophy, Sparkles, CheckCircle, XCircle, Eye, RotateCcw } from 'lucide-react';
+import { Trophy, CheckCircle, XCircle, Eye, RotateCcw, Loader2, Users } from 'lucide-react';
+
+const POLL_MS = 2500;
 
 export default function ScoreDisplay() {
-  const { score, totalQuestions, quizCompleted, questions, userAnswers, goToQuestion, enterReviewMode, restartQuiz } = useQuiz();
-  
+  const {
+    score,
+    totalQuestions,
+    quizCompleted,
+    questions,
+    userAnswers,
+    goToQuestion,
+    enterReviewMode,
+    restartQuiz,
+    gameMode,
+    selectedPlayer,
+    selectedCategory,
+    roomData,
+    updateRoom,
+    getRoom,
+    saveScore,
+    loadScores,
+    playerScores,
+  } = useQuiz();
+
+  const reportedRef = useRef(false);
+  const savedRef = useRef(false);
+
+  // Room: report our score (P1 or P2) once
+  useEffect(() => {
+    if (!quizCompleted || reportedRef.current || !selectedCategory) return;
+    if (gameMode === 'create_room') {
+      updateRoom({ player1: { score, total: totalQuestions } }).finally(() => {
+        reportedRef.current = true;
+      });
+    } else if (gameMode === 'join_room') {
+      updateRoom({ player2: { score, total: totalQuestions } }).finally(() => {
+        reportedRef.current = true;
+      });
+    }
+  }, [quizCompleted, gameMode, selectedCategory, score, totalQuestions, updateRoom]);
+
+  // Room: poll until status === 'completed' or both players
+  useEffect(() => {
+    if (gameMode !== 'create_room' && gameMode !== 'join_room') return;
+    if (roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) return;
+    const t = setInterval(() => {
+      getRoom();
+    }, POLL_MS);
+    return () => clearInterval(t);
+  }, [gameMode, roomData?.status, roomData?.player1, roomData?.player2, getRoom]);
+
+  // 2-Player: save and load scores once
+  useEffect(() => {
+    if (!quizCompleted || savedRef.current || gameMode !== '2player' || !selectedPlayer || !selectedCategory) return;
+    saveScore(selectedPlayer, score, totalQuestions, selectedCategory).finally(() => {
+      loadScores().finally(() => {
+        savedRef.current = true;
+      });
+    });
+  }, [quizCompleted, gameMode, selectedPlayer, selectedCategory, score, totalQuestions, saveScore, loadScores]);
+
   if (!quizCompleted) return null;
 
-  const percentage = Math.round((score / totalQuestions) * 100);
+  const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
   const correctAnswers = score;
   const incorrectAnswers = totalQuestions - score;
   
@@ -71,12 +129,47 @@ export default function ScoreDisplay() {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {/* ... (keep existing stats cards) */}
-        </div>
+        {/* Multiplayer: 2-Player comparison */}
+        {gameMode === '2player' && (
+          <div className="p-4 md:p-5 bg-white/60 rounded-xl border border-primary/20">
+            <h3 className="flex items-center gap-2 font-semibold text-dark-300 mb-3">
+              <Users className="w-5 h-5 text-primary" />
+              Scores
+            </h3>
+            <p className="text-dark-200 mb-2">Your score: <strong>{score}/{totalQuestions}</strong></p>
+            <div className="flex flex-wrap gap-4 text-sm">
+              <span>Player 1: {playerScores?.player1?.history?.length
+                ? `${playerScores.player1.history.slice(-1)[0].score}/${playerScores.player1.history.slice(-1)[0].total}`
+                : '—'}</span>
+              <span>Player 2: {playerScores?.player2?.history?.length
+                ? `${playerScores.player2.history.slice(-1)[0].score}/${playerScores.player2.history.slice(-1)[0].total}`
+                : '—'}</span>
+            </div>
+          </div>
+        )}
 
-        {/* Question Review Grid - NEW SECTION */}
+        {/* Multiplayer: Room comparison */}
+        {(gameMode === 'create_room' || gameMode === 'join_room') && (
+          <div className="p-4 md:p-5 bg-white/60 rounded-xl border border-primary/20">
+            <h3 className="flex items-center gap-2 font-semibold text-dark-300 mb-3">
+              <Users className="w-5 h-5 text-primary" />
+              Room results
+            </h3>
+            {(roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) ? (
+              <div className="flex flex-wrap gap-4 text-sm">
+                <span>Player 1: {roomData?.player1 ? `${roomData.player1.score}/${roomData.player1.total}` : '—'}</span>
+                <span>Player 2: {roomData?.player2 ? `${roomData.player2.score}/${roomData.player2.total}` : '—'}</span>
+              </div>
+            ) : (
+              <p className="text-dark-200 flex items-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Waiting for the other player…
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Question Review Grid */}
         <div className="pt-8 border-t border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-bold text-dark-300">Question Review</h3>
