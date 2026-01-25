@@ -27,7 +27,7 @@ export default function CreateRoomView() {
       createRoom().finally(() => setCreating(false));
     });
   }, [roomCode, createRoom, clearMultiplayerError]); 
-  
+
   const copyCode = () => {
     if (!roomCode) return;
     navigator.clipboard.writeText(roomCode).then(() => {
@@ -50,7 +50,7 @@ export default function CreateRoomView() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
+    <div className="w-full max-w-2xl mx-auto">
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">Room created</h2>
         <p className="text-dark-200 text-sm md:text-base">
