@@ -898,4 +898,266 @@ export const quizQuestionsEn: QuizQuestion[] = [
     category: "General Knowledge",
     difficulty: "medium"
   },
+
+  // Self-development (99–118)
+  {
+    id: 99,
+    question: "What is the primary purpose of setting personal goals?",
+    options: [
+      "To impress other people",
+      "To provide direction and focus for growth",
+      "To avoid taking responsibility"
+    ],
+    correctAnswer: 1,
+    explanation: "Setting personal goals provides direction, focus, and motivation, helping you prioritize actions that support meaningful growth and change.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 100,
+    question: "Which of the following best describes self-awareness?",
+    options: [
+      "Ignoring your emotions and focusing only on results",
+      "Knowing your strengths, weaknesses, values, and emotions",
+      "Relying only on other people’s opinions of you"
+    ],
+    correctAnswer: 1,
+    explanation: "Self-awareness means understanding your internal states, strengths, weaknesses, values, and patterns of behavior so you can make better choices.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 101,
+    question: "What is a key characteristic of a growth mindset?",
+    options: [
+      "Avoiding challenges to prevent failure",
+      "Viewing failure as a learning opportunity",
+      "Believing intelligence is fixed"
+    ],
+    correctAnswer: 1,
+    explanation: "A growth mindset involves seeing challenges and failures as opportunities to learn and improve rather than as permanent limitations.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 102,
+    question: "Which daily habit most directly supports long-term personal development?",
+    options: [
+      "Blaming others when things go wrong",
+      "Reflecting on your day and noting lessons learned",
+      "Avoiding feedback from other people"
+    ],
+    correctAnswer: 1,
+    explanation: "Regular reflection helps you extract lessons from experience, adjust your behavior, and build self-awareness over time.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 103,
+    question: "Emotional intelligence primarily involves the ability to:",
+    options: [
+      "Control other people’s feelings",
+      "Recognize, understand, and manage emotions",
+      "Hide emotions so others cannot see them"
+    ],
+    correctAnswer: 1,
+    explanation: "Emotional intelligence is the capacity to recognize, understand, and manage your own emotions and relate effectively to others’ emotions.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 104,
+    question: "Which action is MOST effective for building self-discipline?",
+    options: [
+      "Relying solely on motivation when you feel inspired",
+      "Creating routines and sticking to small daily commitments",
+      "Waiting until you feel ready to start"
+    ],
+    correctAnswer: 1,
+    explanation: "Self-discipline develops by honoring small, consistent commitments through routines rather than relying on fluctuating motivation.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 105,
+    question: "What is the main benefit of regularly asking for constructive feedback?",
+    options: [
+      "Proving you are already right",
+      "Identifying blind spots and growth opportunities",
+      "Letting others decide your goals"
+    ],
+    correctAnswer: 1,
+    explanation: "Constructive feedback reveals blind spots and improvement areas you may not see on your own, accelerating growth.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 106,
+    question: "Which behavior best demonstrates a proactive approach to personal growth?",
+    options: [
+      "Waiting for problems to solve themselves",
+      "Taking initiative to learn new skills before they are required",
+      "Changing only when forced by external pressure"
+    ],
+    correctAnswer: 1,
+    explanation: "Being proactive means taking initiative, anticipating future needs, and investing in growth before circumstances demand it.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 107,
+    question: "In the context of self-development, resilience is best defined as the ability to:",
+    options: [
+      "Avoid all stressful situations",
+      "Quickly recover and adapt after setbacks",
+      "Ignore negative emotions completely"
+    ],
+    correctAnswer: 1,
+    explanation: "Resilience is the capacity to bounce back from difficulties, adapt, and continue pursuing goals after setbacks.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 108,
+    question: "Which strategy BEST helps turn a vague intention into an achievable goal?",
+    options: [
+      "Keeping the goal general so it stays flexible",
+      "Making it specific, measurable, and time-bound",
+      "Waiting for the perfect time to start"
+    ],
+    correctAnswer: 1,
+    explanation: "Specific, measurable, and time-bound goals clarify what to do and by when, making action and progress easier to track.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 109,
+    question: "What is the MOST effective first step when you notice a limiting belief?",
+    options: [
+      "Pretend it does not exist",
+      "Question its truth and look for counterexamples",
+      "Accept it as part of your identity"
+    ],
+    correctAnswer: 1,
+    explanation: "Challenging a limiting belief by testing its truth and seeking counterexamples helps weaken it and make room for more empowering beliefs.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 110,
+    question: "Why is self-compassion important in personal development?",
+    options: [
+      "It encourages you to avoid responsibility",
+      "It reduces self-criticism and supports learning from mistakes",
+      "It guarantees you will never fail"
+    ],
+    correctAnswer: 1,
+    explanation: "Self-compassion reduces harsh self-criticism, helping you respond to setbacks with kindness and learn more effectively from mistakes.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 111,
+    question: "Which of the following is the BEST example of a growth-oriented self-talk statement?",
+    options: [
+      "I will never be good at this",
+      "I can improve if I keep practicing and learning",
+      "If I fail once, I should stop trying"
+    ],
+    correctAnswer: 1,
+    explanation: "Growth-oriented self-talk emphasizes effort, learning, and progress, such as reminding yourself that practice leads to improvement.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 112,
+    question: "Time management in self-development is primarily about:",
+    options: [
+      "Filling every minute with tasks",
+      "Aligning your time with your priorities and goals",
+      "Working as many hours as possible"
+    ],
+    correctAnswer: 1,
+    explanation: "Effective time management means consciously allocating time to the activities that best support your priorities and goals.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 113,
+    question: "Which practice most directly increases self-knowledge?",
+    options: [
+      "Comparing yourself constantly to others",
+      "Regular journaling about thoughts, feelings, and experiences",
+      "Avoiding situations that challenge you"
+    ],
+    correctAnswer: 1,
+    explanation: "Journaling encourages reflection on your inner world and experiences, building deeper self-knowledge over time.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 114,
+    question: "What is a realistic expectation when starting a new self-development habit?",
+    options: [
+      "Instant transformation with no setbacks",
+      "Gradual progress with possible lapses along the way",
+      "Permanent change after one successful attempt"
+    ],
+    correctAnswer: 1,
+    explanation: "Habits typically form through gradual, consistent repetition, and occasional lapses are normal, not a sign of failure.",
+    category: "self-development",
+    difficulty: "easy"
+  },
+  {
+    id: 115,
+    question: "Which of the following best illustrates taking ownership of your personal growth?",
+    options: [
+      "Blaming your circumstances for lack of progress",
+      "Identifying what you can control and acting on it",
+      "Waiting for someone else to motivate you"
+    ],
+    correctAnswer: 1,
+    explanation: "Taking ownership means focusing on what you can control, making deliberate choices, and taking action toward your own development.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 116,
+    question: "How does having clear personal values support self-development?",
+    options: [
+      "They make decision-making more confusing",
+      "They guide choices and keep actions aligned with what matters",
+      "They prevent you from changing your goals"
+    ],
+    correctAnswer: 1,
+    explanation: "Clear values act as a compass, helping you choose goals and behaviors that feel meaningful and consistent over time.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 117,
+    question: "When working on a long-term goal, which strategy best maintains motivation?",
+    options: [
+      "Focusing only on the final outcome",
+      "Breaking the goal into smaller milestones and celebrating progress",
+      "Changing the goal frequently"
+    ],
+    correctAnswer: 1,
+    explanation: "Dividing a long-term goal into smaller milestones and celebrating each step keeps motivation and momentum high.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 118,
+    question: "What is the main advantage of regularly reviewing your progress?",
+    options: [
+      "Proving that you never make mistakes",
+      "Adjusting strategies based on what is and isn’t working",
+      "Avoiding new challenges"
+    ],
+    correctAnswer: 1,
+    explanation: "Reviewing progress lets you see what works, what does not, and adjust your strategies so you improve more efficiently.",
+    category: "self-development",
+    difficulty: "easy"
+  }
 ];

@@ -12,6 +12,7 @@ import {
   Trophy,
   Utensils,
   Lightbulb,
+  Sprout,
   LucideIcon,
 } from 'lucide-react';
 
@@ -25,6 +26,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   Sports: Trophy,
   'Food & Drink': Utensils,
   'General Knowledge': Lightbulb,
+  'self-development': Sprout,
 };
 
 function getCategoryIcon(id: string): LucideIcon {
@@ -43,6 +45,7 @@ function getCategoryKey(id: string): string {
     'Sports': 'sports',
     'Food & Drink': 'foodAndDrink',
     'General Knowledge': 'generalKnowledge',
+    'self-development': 'selfDevelopment',
   };
   return map[id] ?? id;
 }

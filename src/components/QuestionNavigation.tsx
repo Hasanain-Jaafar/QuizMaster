@@ -64,15 +64,7 @@ export default function QuestionNavigation() {
 
           {/* Quick Navigation Buttons */}
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => goToQuestion(0)}
-              disabled={currentQuestionIndex === 0 || (quizCompleted && !reviewMode)}
-              className="p-3 hover:bg-light-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
-              aria-label="Go to first question"
-            >
-              <SkipBack className="w-5 h-5 text-dark-200" />
-            </button>
-            
+                        
             <button
               onClick={() => setShowQuestionList(!showQuestionList)}
               className="p-3 hover:bg-light-100 rounded-lg transition-colors relative"
@@ -83,15 +75,6 @@ export default function QuestionNavigation() {
               <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 {answeredCount}
               </span>
-            </button>
-            
-            <button
-              onClick={() => goToQuestion(totalQuestions - 1)}
-              disabled={currentQuestionIndex === totalQuestions - 1 || (quizCompleted && !reviewMode)}
-              className="p-3 hover:bg-light-100 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
-              aria-label="Go to last question"
-            >
-              <SkipForward className="w-5 h-5 text-dark-200" />
             </button>
           </div>
 

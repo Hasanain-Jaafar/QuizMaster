@@ -20,12 +20,11 @@ export default async function LocaleLayout({ children, params }: Props) {
     // Bypass getMessages()/next-intl/config: load messages directly to avoid
     // "Couldn't find next-intl config file" when next-intl's config resolution fails.
     const messages = (await import(`@/messages/${locale}.json`)).default;
-    // Pass now and timeZone so NextIntlClientProvider (server) does not call
-    // getNow()/getTimeZone(), which use getConfig -> require('next-intl/config').
-    const now = new Date();
+    // Pass timeZone so NextIntlClientProvider (server) does not call getTimeZone(),
+    // which uses getConfig -> require('next-intl/config').
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return (
-      <NextIntlClientProvider locale={locale} messages={messages} now={now} timeZone={timeZone}>
+      <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
         <div className={locale === 'ar' ? 'font-zain' : ''}>
           {children}
         </div>

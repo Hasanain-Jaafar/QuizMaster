@@ -76,7 +76,8 @@
     "entertainment": "Entertainment",
     "sports": "Sports",
     "foodAndDrink": "Food & Drink",
-    "generalKnowledge": "General Knowledge"
+    "generalKnowledge": "General Knowledge",
+    "selfDevelopment": "Self Development"
   },
   "quiz": {
     "reviewModeNote": "📖 Review Mode: You can review your answers but cannot change them",
