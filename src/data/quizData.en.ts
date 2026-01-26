@@ -1159,5 +1159,136 @@ export const quizQuestionsEn: QuizQuestion[] = [
     explanation: "Reviewing progress lets you see what works, what does not, and adjust your strategies so you improve more efficiently.",
     category: "self-development",
     difficulty: "easy"
+  },
+  {
+    "id": 119,
+    "question": "When your startup hits a major revenue slowdown, which inner question best reflects a founder-level growth mindset?",
+    "options": [
+      "Who is to blame for this situation?",
+      "What assumptions in our current strategy need to be challenged?",
+      "How can I avoid making any risky changes right now?"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Advanced founders use setbacks to question underlying assumptions and refine strategy, treating market turbulence as data for learning, not just a threat.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 120,
+    "question": "As an entrepreneur, which reflective practice most directly links your personal growth to strategic business decisions?",
+    "options": [
+      "Only tracking financial KPIs at the end of each quarter",
+      "Regularly journaling how your mindset influences key business choices",
+      "Delegating all strategic decisions to advisors"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Linking mindset reflections to specific decisions reveals patterns in risk tolerance, bias, and leadership style that directly shape business outcomes.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 121,
+    "question": "You notice a pattern of avoiding hard conversations with underperforming team members. What is the most growth-oriented first step?",
+    "options": [
+      "Delay the conversations until the next performance cycle",
+      "Explore the fear behind the avoidance and script one specific conversation",
+      "Replace team members without discussing performance issues"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Identifying the emotion driving avoidance and preparing a specific conversation builds emotional intelligence and courage instead of reinforcing the pattern.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 122,
+    "question": "Which indicator best shows that you are operating from a founder mindset rather than an employee mindset?",
+    "options": [
+      "Seeking detailed instructions before taking action",
+      "Designing small experiments to test hypotheses under uncertainty",
+      "Waiting for stable conditions before trying new ideas"
+    ],
+    "correctAnswer": 1,
+    "explanation": "A founder mindset treats uncertainty as a space for experimentation, using small tests to learn quickly instead of waiting for perfect information.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 123,
+    "question": "Research suggests emotional intelligence is a key predictor of entrepreneurial success. Practically, which behavior best reflects high EQ in a crisis?",
+    "options": [
+      "Suppressing your emotions and making decisions alone",
+      "Naming emotions in the team, staying composed, and co-creating a path forward",
+      "Announcing a strict plan without inviting input"
+    ],
+    "correctAnswer": 1,
+    "explanation": "High EQ founders regulate their emotions, acknowledge the team’s emotional state, and facilitate collaborative problem-solving under pressure.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 124,
+    "question": "To deliberately locate personal blind spots that limit your company’s growth, which approach is most effective?",
+    "options": [
+      "Asking only close friends who agree with you",
+      "Requesting anonymous, specific feedback from team and mentors on your decisions",
+      "Relying on your intuition and ignoring external input"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Structured, anonymous feedback from diverse stakeholders reveals decision patterns and behaviors you cannot easily see yourself.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 125,
+    "question": "You realize your lack of financial skill is creating bottlenecks. What is the most strategic self-development move?",
+    "options": [
+      "Ignore it and focus only on product and sales",
+      "Create a learning plan combining education, mentoring, and delegating specific tasks",
+      "Immediately outsource all financial decisions with no involvement"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Combining structured learning, expert guidance, and selective delegation upgrades your competence while still owning key financial decisions.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 126,
+    "question": "Which question best helps you clarify your entrepreneurial “why” during burnout?",
+    "options": [
+      "How can I work more hours to catch up?",
+      "What impact do I ultimately want this venture to have on people?",
+      "How can I avoid hearing any negative feedback?"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Reconnecting with the deeper impact you want to create realigns motivation, guides strategic choices, and informs what to say no to.",
+    category: "self-development",
+    difficulty: "medium"
+  },
+  {
+    id: 127,
+    "question": "You are considering a bold pivot in your business model. Which internal signal is the most useful data point to examine before deciding?",
+    "options": [
+      "How uncomfortable you feel about any kind of change",
+      "Whether your discomfort comes from rational risk or ego-based fear",
+      "Whether other founders on social media are making similar moves"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Distinguishing rational risk from ego-driven fear helps you make cleaner strategic decisions instead of reacting from unexamined emotion.",
+    category: "self-development",
+    difficulty: "hard"
+  },
+  {
+    id: 128,
+    "question": "To systematically build resilience as a founder in a volatile market, which practice is most effective over the long term?",
+    "options": [
+      "Avoiding ambitious goals to reduce stress",
+      "Running regular post-mortems on failures and extracting explicit learning rules",
+      "Switching ideas frequently to escape uncomfortable situations"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Structured post-mortems convert setbacks into explicit learning, strengthening your capacity to adapt and stay engaged through future turbulence.",
+    category: "self-development",
+    difficulty: "hard"
   }
+
 ];

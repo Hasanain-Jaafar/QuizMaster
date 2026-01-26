@@ -120,4 +120,94 @@ export const svOverrides: { question: string; options: string[]; explanation: st
   { question: "Hur stödjer tydliga personliga värderingar självutveckling?", options: ["De gör beslutsfattande mer förvirrande", "De guidar val och håller handlingar i linje med vad som betyder något", "De hindrar dig från att ändra mål"], explanation: "Tydliga värderingar fungerar som kompass för meningsfulla mål och beteenden." },
   { question: "Vilken strategi upprätthåller motivation bäst vid ett långsiktigt mål?", options: ["Bara fokusera på slutresultatet", "Dela upp målet i mindre milstolpar och fira framsteg", "Byta mål ofta"], explanation: "Att bryta upp långsiktiga mål i milstolpar och fira varje steg håller motivationen uppe." },
   { question: "Vad är den största fördelen med att regelbundet granska ditt framsteg?", options: ["Bevisa att du aldrig gör misstag", "Justera strategier utifrån vad som fungerar och inte", "Undvika nya utmaningar"], explanation: "Att granska framsteg gör att du ser vad som fungerar och kan justera strategier." },
+  {
+    question: "När ditt startup drabbas av en kraftig intäktsnedgång, vilken inre fråga speglar bäst ett entreprenöriellt tillväxtmindset?",
+    options: [
+      "Vem bär skulden för den här situationen?",
+      "Vilka antaganden i vår nuvarande strategi behöver ifrågasättas?",
+      "Hur kan jag undvika alla riskfyllda förändringar just nu?"
+    ],
+    explanation: "Erfarna grundare använder motgångar för att ifrågasätta grundläggande antaganden och förfina strategin, och ser marknadens svängningar som data för lärande snarare än enbart hot."
+  },
+  {
+    question: "Som entreprenör, vilken reflektionsvana kopplar mest direkt din personliga utveckling till strategiska affärsbeslut?",
+    options: [
+      "Att bara följa finansiella nyckeltal i slutet av varje kvartal",
+      "Att regelbundet skriva ned hur ditt mindset påverkar dina viktigaste beslut",
+      "Att lägga över alla strategiska beslut på rådgivare"
+    ],
+    explanation: "Att koppla självreflektion till konkreta beslut avslöjar mönster i risktagande, biaser och ledarskapsstil som direkt påverkar affärsresultat."
+  },
+  {
+    question: "Du märker att du ofta undviker svåra samtal med lågpresterande teammedlemmar. Vad är det mest utvecklande första steget?",
+    options: [
+      "Att skjuta upp samtalen till nästa utvärderingscykel",
+      "Att utforska rädslan bakom undvikandet och formulera ett konkret samtal",
+      "Att byta ut teammedlemmar utan att diskutera deras prestation"
+    ],
+    explanation: "Att identifiera känslan bakom undvikandet och förbereda ett specifikt samtal bygger emotionell intelligens och mod istället för att förstärka mönstret."
+  },
+  {
+    question: "Vilken indikator visar tydligast att du agerar med ett grundarmindset snarare än ett anställningsmindset?",
+    options: [
+      "Att söka detaljerade instruktioner innan du agerar",
+      "Att designa små experiment för att testa hypoteser i osäkerhet",
+      "Att vänta på stabila förhållanden innan du testar nya idéer"
+    ],
+    explanation: "Ett grundarmindset ser osäkerhet som en arena för experiment och använder små tester för att lära snabbt istället för att vänta på perfekt information."
+  },
+  {
+    question: "Forskning pekar på att emotionell intelligens är en nyckelfaktor i entreprenöriell framgång. Vilket beteende speglar hög EQ i en kris?",
+    options: [
+      "Att undertrycka dina känslor och fatta beslut helt själv",
+      "Att sätta ord på teamets känslor, behålla lugnet och skapa en lösning tillsammans",
+      "Att presentera en strikt plan utan att bjuda in synpunkter"
+    ],
+    explanation: "Grundare med hög emotionell intelligens reglerar sina känslor, erkänner teamets känslotillstånd och faciliterar gemensam problemlösning under press."
+  },
+  {
+    question: "För att medvetet hitta blinda fläckar som begränsar företagets tillväxt, vilket tillvägagångssätt är mest effektivt?",
+    options: [
+      "Att bara fråga nära vänner som oftast håller med dig",
+      "Att be om anonym och specifik feedback från team och mentorer om dina beslut",
+      "Att lita helt på din magkänsla och ignorera extern input"
+    ],
+    explanation: "Strukturerad, anonym feedback från olika intressenter avslöjar beslutsmönster och beteenden du själv har svårt att se."
+  },
+  {
+    question: "Du inser att bristande finansiell kompetens skapar flaskhalsar. Vilket är det mest strategiska steget i din egen utveckling?",
+    options: [
+      "Att ignorera det och fokusera enbart på produkt och försäljning",
+      "Att skapa en lärandeplan som kombinerar utbildning, mentorskap och delegering av specifika uppgifter",
+      "Att omedelbart lägga ut alla finansiella beslut på externa aktörer utan att vara delaktig"
+    ],
+    explanation: "Att kombinera strukturerat lärande, expertstöd och selektiv delegering höjer din kompetens samtidigt som du behåller ägarskap över nyckelbeslut."
+  },
+  {
+    question: "Vilken fråga hjälper dig mest att klargöra ditt entreprenöriella \"varför\" under utbrändhet?",
+    options: [
+      "Hur kan jag jobba fler timmar för att komma ikapp?",
+      "Vilken påverkan vill jag i slutändan att det här bolaget ska ha på människor?",
+      "Hur kan jag undvika att höra någon negativ feedback?"
+    ],
+    explanation: "Att återkoppla till den djupare påverkan du vill skapa återställer motivationen, styr strategiska val och tydliggör vad du ska säga nej till."
+  },
+  {
+    question: "Du överväger en radikal pivot i affärsmodellen. Vilken inre signal är mest värdefull att undersöka innan beslut?",
+    options: [
+      "Hur obekväm du känner dig inför all sorts förändring",
+      "Om obehaget kommer från rationell risk eller ego-baserad rädsla",
+      "Om andra grundare i sociala medier gör liknande drag"
+    ],
+    explanation: "Att skilja rationell risk från ego-drivna rädslor hjälper dig att fatta renare strategiska beslut istället för att reagera impulsivt."
+  },
+  {
+    question: "För att långsiktigt bygga motståndskraft som grundare i en volatil marknad, vilken vana är mest effektiv?",
+    options: [
+      "Att undvika ambitiösa mål för att minska stress",
+      "Att regelbundet göra efteranalyser av misslyckanden och formulera tydliga lärdomar",
+      "Att ofta byta idé för att slippa jobbiga situationer"
+    ],
+    explanation: "Strukturerade efteranalyser gör att motgångar omvandlas till tydligt lärande, vilket stärker din förmåga att anpassa dig och fortsätta framåt."
+  }
 ];

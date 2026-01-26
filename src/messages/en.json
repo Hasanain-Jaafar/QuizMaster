@@ -77,7 +77,8 @@
     "sports": "Sports",
     "foodAndDrink": "Food & Drink",
     "generalKnowledge": "General Knowledge",
-    "selfDevelopment": "Self Development"
+    "selfDevelopment": "Self Development",
+    "selfDevelopmentEntrepreneur": "Self Development & Entrepreneur"
   },
   "quiz": {
     "reviewModeNote": "📖 Review Mode: You can review your answers but cannot change them",

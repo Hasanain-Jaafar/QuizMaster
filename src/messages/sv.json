@@ -77,7 +77,8 @@
     "sports": "Sport",
     "foodAndDrink": "Mat och dryck",
     "generalKnowledge": "Allmänna kunskaper",
-    "selfDevelopment": "Självutveckling"
+    "selfDevelopment": "Självutveckling",
+    "selfDevelopmentEntrepreneur": "Självutveckling & entreprenörskap"
   },
   "quiz": {
     "reviewModeNote": "📖 Granskningsläge: Du kan granska dina svar men inte ändra dem",

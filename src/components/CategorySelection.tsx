@@ -27,6 +27,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   'Food & Drink': Utensils,
   'General Knowledge': Lightbulb,
   'self-development': Sprout,
+  'self-development_entrepreneur': Sprout,
 };
 
 function getCategoryIcon(id: string): LucideIcon {
@@ -46,6 +47,7 @@ function getCategoryKey(id: string): string {
     'Food & Drink': 'foodAndDrink',
     'General Knowledge': 'generalKnowledge',
     'self-development': 'selfDevelopment',
+    'self-development_entrepreneur': 'selfDevelopmentEntrepreneur',
   };
   return map[id] ?? id;
 }
