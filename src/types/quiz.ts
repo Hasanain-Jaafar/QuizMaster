@@ -18,10 +18,16 @@ export interface QuizState {
 export type GameMode = 'solo' | '2player' | 'create_room' | 'join_room' | null;
 export type SelectedPlayer = 'player1' | 'player2';
 
+export interface RoomPlayer {
+  score: number;
+  total: number;
+  name?: string;
+}
+
 export interface RoomData {
   code: string;
-  player1: { score: number; total: number } | null;
-  player2: { score: number; total: number } | null;
+  player1: RoomPlayer | null;
+  player2: RoomPlayer | null;
   category: string | null;
   status: 'waiting' | 'started' | 'completed';
   createdAt: number;

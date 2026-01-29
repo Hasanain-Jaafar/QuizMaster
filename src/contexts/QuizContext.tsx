@@ -32,6 +32,8 @@ interface QuizContextType extends QuizState {
   roomData: RoomData | null;
   setRoomCode: (c: string | null) => void;
   setRoomData: (d: RoomData | null) => void;
+  myPlayerName: string | null;
+  setMyPlayerName: (name: string | null) => void;
   createRoomContinued: boolean;
   setCreateRoomContinued: (v: boolean) => void;
   playerScores: PlayerScores | null;
@@ -63,6 +65,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const [selectedPlayer, setSelectedPlayer] = useState<SelectedPlayer | null>(null);
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [roomData, setRoomData] = useState<RoomData | null>(null);
+  const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
   const [createRoomContinued, setCreateRoomContinued] = useState(false);
   const [playerScores, setPlayerScores] = useState<PlayerScores | null>(null);
   const [multiplayerError, setMultiplayerError] = useState<string | null>(null);
@@ -204,6 +207,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     setSelectedPlayer(null);
     setRoomCode(null);
     setRoomData(null);
+    setMyPlayerName(null);
     setCreateRoomContinued(false);
     setPlayerScores(null);
     setMultiplayerError(null);
@@ -335,6 +339,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     roomData,
     setRoomCode,
     setRoomData,
+    myPlayerName,
+    setMyPlayerName,
     createRoomContinued,
     setCreateRoomContinued,
     playerScores,

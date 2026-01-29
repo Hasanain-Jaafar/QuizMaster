@@ -23,6 +23,7 @@ export default function ScoreDisplay() {
     selectedPlayer,
     selectedCategory,
     roomData,
+    myPlayerName,
     updateRoom,
     getRoom,
     saveScore,
@@ -33,19 +34,20 @@ export default function ScoreDisplay() {
   const reportedRef = useRef(false);
   const savedRef = useRef(false);
 
-  // Room: report our score (P1 or P2) once
+  // Room: report our score (P1 or P2) once, with optional name
   useEffect(() => {
     if (!quizCompleted || reportedRef.current || !selectedCategory) return;
+    const name = (myPlayerName?.trim() || undefined);
     if (gameMode === 'create_room') {
-      updateRoom({ player1: { score, total: totalQuestions } }).finally(() => {
+      updateRoom({ player1: { score, total: totalQuestions, name } }).finally(() => {
         reportedRef.current = true;
       });
     } else if (gameMode === 'join_room') {
-      updateRoom({ player2: { score, total: totalQuestions } }).finally(() => {
+      updateRoom({ player2: { score, total: totalQuestions, name } }).finally(() => {
         reportedRef.current = true;
       });
     }
-  }, [quizCompleted, gameMode, selectedCategory, score, totalQuestions, updateRoom]);
+  }, [quizCompleted, gameMode, selectedCategory, score, totalQuestions, myPlayerName, updateRoom]);
 
   // Room: poll until status === 'completed' or both players
   useEffect(() => {
@@ -155,8 +157,8 @@ export default function ScoreDisplay() {
             </h3>
             {(roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) ? (
               <div className="flex flex-wrap gap-4 text-sm">
-                <span>{t('player1Label')} {roomData?.player1 ? `${roomData.player1.score}/${roomData.player1.total}` : '—'}</span>
-                <span>{t('player2Label')} {roomData?.player2 ? `${roomData.player2.score}/${roomData.player2.total}` : '—'}</span>
+                <span><strong>{roomData?.player1?.name ? `${roomData.player1.name}:` : t('player1Label')}</strong> {roomData?.player1 ? `${roomData.player1.score}/${roomData.player1.total}` : '—'}</span>
+                <span><strong>{roomData?.player2?.name ? `${roomData.player2.name}:` : t('player2Label')}</strong> {roomData?.player2 ? `${roomData.player2.score}/${roomData.player2.total}` : '—'}</span>
               </div>
             ) : (
               <p className="text-dark-200 flex items-center gap-2">

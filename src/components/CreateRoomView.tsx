@@ -12,6 +12,8 @@ export default function CreateRoomView() {
     roomCode,
     setGameMode,
     setCreateRoomContinued,
+    setMyPlayerName,
+    myPlayerName,
     clearMultiplayerError,
   } = useQuiz();
   const [creating, setCreating] = useState(false);
@@ -79,6 +81,22 @@ export default function CreateRoomView() {
             <span className="text-sm font-medium">{copied ? t('copied') : t('copy')}</span>
           </button>
         </div>
+      </div>
+
+      <div className="mt-6">
+        <label htmlFor="create-room-name" className="block text-sm text-dark-200 mb-2">
+          {t('yourName')}
+        </label>
+        <input
+          id="create-room-name"
+          type="text"
+          value={myPlayerName ?? ''}
+          onChange={(e) => setMyPlayerName(e.target.value.trim() || null)}
+          placeholder={t('yourNamePlaceholder')}
+          className="w-full px-4 py-3 rounded-xl border-2 border-light-300 focus:border-primary focus:outline-none text-dark-300"
+          maxLength={32}
+          aria-label={t('yourName')}
+        />
       </div>
 
       <div className="mt-8 flex flex-col sm:flex-row gap-3">

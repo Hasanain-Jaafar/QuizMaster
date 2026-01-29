@@ -9,7 +9,7 @@ const POLL_MS = 2500;
 
 export default function JoinRoomView() {
   const t = useTranslations('joinRoom');
-  const { joinRoom, getRoom, roomData, roomCode, setGameMode, startQuiz, clearMultiplayerError } = useQuiz();
+  const { joinRoom, getRoom, roomData, roomCode, setGameMode, setMyPlayerName, myPlayerName, startQuiz, clearMultiplayerError } = useQuiz();
   const [code, setCode] = useState('');
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +78,22 @@ export default function JoinRoomView() {
             {error}
           </div>
         )}
+
+        <div className="mb-4">
+          <label htmlFor="join-room-name" className="block text-sm text-dark-200 mb-2">
+            {t('yourName')}
+          </label>
+          <input
+            id="join-room-name"
+            type="text"
+            value={myPlayerName ?? ''}
+            onChange={(e) => setMyPlayerName(e.target.value.trim() || null)}
+            placeholder={t('yourNamePlaceholder')}
+            className="w-full px-4 py-3 rounded-xl border-2 border-light-300 focus:border-primary focus:outline-none text-dark-300"
+            maxLength={32}
+            aria-label={t('yourName')}
+          />
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <input

@@ -8,8 +8,8 @@ const CORS = {
 
 type Room = {
   code: string;
-  player1: { score: number; total: number } | null;
-  player2: { score: number; total: number } | null;
+  player1: { score: number; total: number; name?: string } | null;
+  player2: { score: number; total: number; name?: string } | null;
   category: string | null;
   status: 'waiting' | 'started' | 'completed';
   createdAt: number;
