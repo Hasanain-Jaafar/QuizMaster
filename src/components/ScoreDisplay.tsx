@@ -49,13 +49,13 @@ export default function ScoreDisplay() {
     }
   }, [quizCompleted, gameMode, selectedCategory, score, totalQuestions, myPlayerName, updateRoom]);
 
-  // Room: poll until status === 'completed' or both players
+  // Room: poll until status === 'completed' or both players (so P1 sees P2's result when P2 finishes)
   useEffect(() => {
     if (gameMode !== 'create_room' && gameMode !== 'join_room') return;
     if (roomData?.status === 'completed' || (roomData?.player1 && roomData?.player2)) return;
-    const id = setInterval(() => {
-      getRoom();
-    }, POLL_MS);
+    // Sync immediately, then keep polling
+    getRoom();
+    const id = setInterval(() => getRoom(), POLL_MS);
     return () => clearInterval(id);
   }, [gameMode, roomData?.status, roomData?.player1, roomData?.player2, getRoom]);
 
