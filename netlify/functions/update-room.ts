@@ -6,21 +6,24 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+type RoomPlayer = { score: number; total: number; name?: string } | null;
 type Room = {
   code: string;
-  player1: { score: number; total: number; name?: string } | null;
-  player2: { score: number; total: number; name?: string } | null;
+  players: RoomPlayer[];
   category: string | null;
   status: 'waiting' | 'started' | 'completed';
   createdAt: number;
 };
 
+const ROOM_MAX_PLAYERS = 6;
+
 type Body = {
   code: string;
   category?: string;
   status?: 'waiting' | 'started' | 'completed';
-  player1?: { score: number; total: number; name?: string } | null;
-  player2?: { score: number; total: number; name?: string } | null;
+  players?: RoomPlayer[];
+  playerIndex?: number;
+  player?: RoomPlayer;
 };
 
 export async function handler(event: { httpMethod: string; body?: string }) {
@@ -39,29 +42,59 @@ export async function handler(event: { httpMethod: string; body?: string }) {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { code: raw, category, status, player1, player2 } = body;
+  const { code: raw, category, status, players: playersFull, playerIndex, player } = body;
   const code = (raw || '').toUpperCase().trim();
   if (!code) {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Missing code' }) };
   }
 
   const store = getStore('quiz-data');
-  const existing = (await store.get(`room:${code}`, { type: 'json' })) as Room | null;
-  if (!existing) {
+  const raw = await store.get(`room:${code}`, { type: 'json' });
+  if (!raw) {
     return { statusCode: 404, headers: CORS, body: JSON.stringify({ error: 'Room not found' }) };
   }
-
-  const updates: Partial<Room> = {};
-  if (category !== undefined) updates.category = category;
-  if (status !== undefined) updates.status = status;
-  if (player1 !== undefined) updates.player1 = player1;
-  if (player2 !== undefined) updates.player2 = player2;
-
-  let next: Room = { ...existing, ...updates };
-  // When player2 is set, mark as completed
-  if (player2 !== undefined && player2 != null) {
-    next = { ...next, status: 'completed' };
+  const r = raw as Record<string, unknown>;
+  const legacy = raw as { player1?: RoomPlayer; player2?: RoomPlayer };
+  let existing: Room = raw as Room;
+  if (!Array.isArray(r.players) || r.players.length < ROOM_MAX_PLAYERS) {
+    existing = {
+      code: (r.code as string) ?? '',
+      players: Array(ROOM_MAX_PLAYERS).fill(null),
+      category: (r.category as string | null) ?? null,
+      status: (r.status as Room['status']) ?? 'waiting',
+      createdAt: (r.createdAt as number) ?? Date.now(),
+    };
+    if (legacy.player1 != null) existing.players[0] = legacy.player1;
+    if (legacy.player2 != null) existing.players[1] = legacy.player2;
   }
+
+  let nextPlayers: RoomPlayer[] = [...existing.players];
+  if (nextPlayers.length < ROOM_MAX_PLAYERS) {
+    while (nextPlayers.length < ROOM_MAX_PLAYERS) nextPlayers.push(null);
+  }
+
+  if (playersFull !== undefined && Array.isArray(playersFull)) {
+    nextPlayers = playersFull.slice(0, ROOM_MAX_PLAYERS);
+    while (nextPlayers.length < ROOM_MAX_PLAYERS) nextPlayers.push(null);
+  } else if (typeof playerIndex === 'number' && playerIndex >= 0 && playerIndex < ROOM_MAX_PLAYERS) {
+    nextPlayers[playerIndex] = player ?? null;
+  }
+
+  const next: Room = {
+    ...existing,
+    category: category !== undefined ? category : existing.category,
+    status: status !== undefined ? status : existing.status,
+    players: nextPlayers,
+  };
+
+  const hasSubmitted = (p: RoomPlayer): boolean =>
+    p != null && typeof p.score === 'number' && typeof p.total === 'number' && p.score >= 0 && p.total > 0;
+  const filledSlots = nextPlayers.filter((p) => p != null);
+  const allSubmitted = filledSlots.length > 0 && filledSlots.every(hasSubmitted);
+  if (allSubmitted) {
+    next.status = 'completed';
+  }
+
   await store.setJSON(`room:${code}`, next);
 
   return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify(next) };

@@ -19,21 +19,23 @@ export async function handler(event: { httpMethod: string; queryStringParameters
   }
 
   const playerId = event.queryStringParameters?.playerId ?? undefined;
+  const PLAYER_IDS = ['player0', 'player1', 'player2', 'player3', 'player4', 'player5'] as const;
 
   const store = getStore('quiz-data');
-  const result: { player1?: PlayerData; player2?: PlayerData } = {};
+  const result: Record<string, PlayerData> = {};
 
-  const fetchOne = async (id: 'player1' | 'player2') => {
+  const fetchOne = async (id: string) => {
     const raw = await store.get(`scores:${id}`, { type: 'json' });
     const data = raw as { history?: ScoreEntry[] } | null;
     return data && Array.isArray(data.history) ? { history: data.history } : { history: [] };
   };
 
-  if (playerId === 'player1' || playerId === 'player2') {
+  if (playerId && PLAYER_IDS.includes(playerId as (typeof PLAYER_IDS)[number])) {
     result[playerId] = await fetchOne(playerId);
   } else {
-    result.player1 = await fetchOne('player1');
-    result.player2 = await fetchOne('player2');
+    for (const id of PLAYER_IDS) {
+      result[id] = await fetchOne(id);
+    }
   }
 
   return { statusCode: 200, headers: { ...CORS, 'Content-Type': 'application/json' }, body: JSON.stringify(result) };

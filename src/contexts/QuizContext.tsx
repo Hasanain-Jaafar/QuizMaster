@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useMemo, ReactNode } from 'react';
 import { useLocale } from 'next-intl';
-import { QuizState, QuizQuestion, GameMode, SelectedPlayer, RoomData, PlayerScores } from '@/types/quiz';
+import { QuizState, QuizQuestion, GameMode, SelectedPlayer, RoomData, PlayerScores, ROOM_MAX_PLAYERS } from '@/types/quiz';
 import { getCategories, getQuestionsByCategory } from '@/data/quizData';
 
 const API = '/.netlify/functions';
@@ -32,6 +32,7 @@ interface QuizContextType extends QuizState {
   roomData: RoomData | null;
   setRoomCode: (c: string | null) => void;
   setRoomData: (d: RoomData | null) => void;
+  myPlayerIndex: number | null;
   myPlayerName: string | null;
   setMyPlayerName: (name: string | null) => void;
   createRoomContinued: boolean;
@@ -42,8 +43,8 @@ interface QuizContextType extends QuizState {
   createRoom: () => Promise<{ ok: true } | { ok: false; error: string }>;
   joinRoom: (code: string) => Promise<{ ok: true } | { ok: false; error: string }>;
   getRoom: () => Promise<RoomData | null>;
-  updateRoom: (updates: Partial<Pick<RoomData, 'category' | 'status' | 'player1' | 'player2'>>) => Promise<boolean>;
-  saveScore: (playerId: 'player1' | 'player2', score: number, total: number, category: string) => Promise<boolean>;
+  updateRoom: (updates: { category?: string; status?: RoomData['status']; playerIndex?: number; player?: RoomData['players'][0] }) => Promise<boolean>;
+  saveScore: (playerIndex: number, score: number, total: number, category: string) => Promise<boolean>;
   loadScores: () => Promise<boolean>;
   resetToModeSelection: () => void;
 }
@@ -65,6 +66,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const [selectedPlayer, setSelectedPlayer] = useState<SelectedPlayer | null>(null);
   const [roomCode, setRoomCode] = useState<string | null>(null);
   const [roomData, setRoomData] = useState<RoomData | null>(null);
+  const [myPlayerIndex, setMyPlayerIndex] = useState<number | null>(null);
   const [myPlayerName, setMyPlayerName] = useState<string | null>(null);
   const [createRoomContinued, setCreateRoomContinued] = useState(false);
   const [playerScores, setPlayerScores] = useState<PlayerScores | null>(null);
@@ -94,13 +96,13 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       } else {
         setRoomData({
           code,
-          player1: null,
-          player2: null,
+          players: Array(ROOM_MAX_PLAYERS).fill(null),
           category: null,
           status: 'waiting',
           createdAt: Date.now(),
         });
       }
+      setMyPlayerIndex(0);
       return { ok: true };
     } catch (e) {
       const msg = 'Multiplayer requires Netlify or netlify dev.';
@@ -125,15 +127,42 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         return { ok: false, error: msg };
       }
       if (!data?.code) return { ok: false, error: 'Invalid response' };
+      const players: (RoomData['players'][0])[] = Array.isArray(data.players) ? data.players : [];
+      let slot = -1;
+      for (let i = 1; i < ROOM_MAX_PLAYERS; i++) {
+        if (players[i] == null) {
+          slot = i;
+          break;
+        }
+      }
+      if (slot < 0) {
+        setMultiplayerError('Room is full');
+        return { ok: false, error: 'Room is full' };
+      }
       setRoomCode(data.code);
       setRoomData(data);
+      const name = (typeof myPlayerName === 'string' ? myPlayerName.trim() : '') || undefined;
+      const updateRes = await fetch(`${API}/update-room`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: data.code,
+          playerIndex: slot,
+          player: { score: -1, total: 0, name },
+        }),
+      });
+      const updated = await updateRes.json().catch(() => null);
+      if (updateRes.ok && updated?.code) {
+        setRoomData(updated);
+      }
+      setMyPlayerIndex(slot);
       return { ok: true };
     } catch (e) {
       const msg = 'Multiplayer requires Netlify or netlify dev.';
       setMultiplayerError(msg);
       return { ok: false, error: msg };
     }
-  }, []);
+  }, [myPlayerName]);
 
   const getRoom = useCallback(async (): Promise<RoomData | null> => {
     if (!roomCode) return null;
@@ -150,7 +179,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   }, [roomCode]);
 
-  const updateRoom = useCallback(async (updates: Partial<Pick<RoomData, 'category' | 'status' | 'player1' | 'player2'>>): Promise<boolean> => {
+  const updateRoom = useCallback(async (updates: { category?: string; status?: RoomData['status']; playerIndex?: number; player?: RoomData['players'][0] }): Promise<boolean> => {
     if (!roomCode) return false;
     try {
       const res = await fetch(`${API}/update-room`, {
@@ -171,7 +200,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   }, [roomCode]);
 
-  const saveScore = useCallback(async (playerId: 'player1' | 'player2', score: number, total: number, category: string): Promise<boolean> => {
+  const saveScore = useCallback(async (playerIndex: number, score: number, total: number, category: string): Promise<boolean> => {
+    const playerId = `player${playerIndex}`;
     try {
       const res = await fetch(`${API}/save-score`, {
         method: 'POST',
@@ -208,6 +238,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       setSelectedPlayer(null);
       setRoomCode(null);
       setRoomData(null);
+      setMyPlayerIndex(null);
       setMyPlayerName(null);
       setCreateRoomContinued(false);
       setPlayerScores(null);
@@ -222,14 +253,12 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       });
       setReviewMode(false);
     };
-    if (gameMode === 'create_room' && roomCode) {
-      updateRoom({ player1: null }).finally(doReset);
-    } else if (gameMode === 'join_room' && roomCode) {
-      updateRoom({ player2: null }).finally(doReset);
+    if ((gameMode === 'create_room' || gameMode === 'join_room') && roomCode && myPlayerIndex != null) {
+      updateRoom({ playerIndex: myPlayerIndex, player: null }).finally(doReset);
     } else {
       doReset();
     }
-  }, [gameMode, roomCode, updateRoom]);
+  }, [gameMode, roomCode, myPlayerIndex, updateRoom]);
 
   const startQuiz = (categoryId: string) => {
     const filtered = getQuestionsByCategory(categoryId, locale);
@@ -348,6 +377,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     roomData,
     setRoomCode,
     setRoomData,
+    myPlayerIndex,
     myPlayerName,
     setMyPlayerName,
     createRoomContinued,

@@ -33,7 +33,8 @@
   "createRoom": {
     "creatingRoom": "Creating room…",
     "roomCreated": "Room created",
-    "shareCode": "Share this code with the other player. When both are ready, pick a category and start.",
+    "shareCode": "Share this code with others. When everyone is ready, pick a category and start.",
+    "playersCount": "{count} / 6 players",
     "roomCode": "Room code",
     "yourName": "Your name",
     "yourNamePlaceholder": "e.g. Alex",
@@ -44,7 +45,8 @@
   },
   "joinRoom": {
     "joinRoom": "Join a room",
-    "enterCode": "Enter the 6-character code from the host.",
+    "enterCode": "Enter the 6-character code from the host. Up to 6 players.",
+    "playersCount": "{count} / 6 players",
     "roomCode": "Room code",
     "yourName": "Your name",
     "yourNamePlaceholder": "e.g. Sam",
@@ -130,6 +132,7 @@
     "yourScore": "Your score:",
     "player1Label": "Player 1:",
     "player2Label": "Player 2:",
+    "playerLabel": "Player {n}:",
     "waitingForOtherPlayer": "Waiting for the other player…",
     "syncingResults": "Syncing results…",
     "otherPlayerLeft": "The other player left the room or restarted the game.",

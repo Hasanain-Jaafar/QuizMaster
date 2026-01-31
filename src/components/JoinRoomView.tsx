@@ -11,6 +11,7 @@ export default function JoinRoomView() {
   const t = useTranslations('joinRoom');
   const { joinRoom, getRoom, roomData, roomCode, setGameMode, setMyPlayerName, myPlayerName, startQuiz, clearMultiplayerError } = useQuiz();
   const [code, setCode] = useState('');
+  const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -127,19 +128,20 @@ export default function JoinRoomView() {
   // Joined, waiting for host to pick category
   if (!roomData?.category) {
     return (
-      <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
+      <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center py-12 px-4">
         <Loader2 className="w-32 h-32 text-primary animate-spin mb-4" />
-        <p className="text-dark-200 text-center">{t('waitingForP1')}</p>
-        <p className="text-sm text-dark-100 mt-2">{t('room')}: {roomCode}</p>
+        <p className="text-dark-200 text-center min-w-0 max-w-full">{t('waitingForP1')}</p>
+        <p className="text-sm text-dark-100 mt-2 text-center">{t('room')}: {roomCode}</p>
+        <p className="text-sm text-dark-200 mt-1 text-center">{t('playersCount', { count: playerCount })}</p>
       </div>
     );
   }
 
   // Category is set; startQuiz was called from useEffect. Render a brief loading until Quiz switches to QuizRun
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
+    <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center py-12 px-4">
       <Loader2 className="w-32 h-32 text-primary animate-spin mb-4" />
-      <p className="text-dark-200">{t('startingQuiz')}</p>
+      <p className="text-dark-200 text-center min-w-0 max-w-full">{t('startingQuiz')}</p>
     </div>
   );
 }

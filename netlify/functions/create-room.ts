@@ -31,10 +31,10 @@ export async function handler(event: { httpMethod: string }) {
   }
   code = code!;
 
+  const ROOM_MAX_PLAYERS = 6;
   const room = {
     code,
-    player1: null as { score: number; total: number; name?: string } | null,
-    player2: null as { score: number; total: number; name?: string } | null,
+    players: Array(ROOM_MAX_PLAYERS).fill(null) as ({ score: number; total: number; name?: string } | null)[],
     category: null as string | null,
     status: 'waiting' as const,
     createdAt: Date.now(),

@@ -3,19 +3,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
 import { useTranslations } from 'next-intl';
-import { Copy, Check, Loader2, ArrowRight } from 'lucide-react';
+import { Copy, Check, Loader2, ArrowRight, Users } from 'lucide-react';
+
+const POLL_MS = 2000;
 
 export default function CreateRoomView() {
   const t = useTranslations('createRoom');
   const {
     createRoom,
     roomCode,
+    roomData,
+    getRoom,
     setGameMode,
     setCreateRoomContinued,
     setMyPlayerName,
     myPlayerName,
     clearMultiplayerError,
   } = useQuiz();
+  const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
   const [creating, setCreating] = useState(false);
   const [copied, setCopied] = useState(false);
   const startedRef = useRef(false);
@@ -24,13 +29,19 @@ export default function CreateRoomView() {
     if (roomCode) return;
     if (startedRef.current) return;
     startedRef.current = true;
-    // Defer to avoid calling setState synchronously in the effect body (cascading renders)
     queueMicrotask(() => {
       clearMultiplayerError();
       setCreating(true);
       createRoom().finally(() => setCreating(false));
     });
-  }, [roomCode, createRoom, clearMultiplayerError]); 
+  }, [roomCode, createRoom, clearMultiplayerError]);
+
+  useEffect(() => {
+    if (!roomCode) return;
+    getRoom();
+    const id = setInterval(() => getRoom(), POLL_MS);
+    return () => clearInterval(id);
+  }, [roomCode, getRoom]); 
 
   const copyCode = () => {
     if (!roomCode) return;
@@ -42,9 +53,9 @@ export default function CreateRoomView() {
 
   if (creating && !roomCode) {
     return (
-      <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
+      <div className="w-full max-w-xl mx-auto flex flex-col items-center justify-center py-12 px-4">
         <Loader2 className="w-32 h-32 text-primary animate-spin mb-4" />
-        <p className="text-dark-200">{t('creatingRoom')}</p>
+        <p className="text-dark-200 text-center min-w-0 max-w-full">{t('creatingRoom')}</p>
       </div>
     );
   }
@@ -79,7 +90,13 @@ export default function CreateRoomView() {
       </div>
 
       <div className="p-6 bg-white rounded-xl border-2 border-primary/20 shadow-sm">
-        <p className="text-sm text-dark-200 mb-2">{t('roomCode')}</p>
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <p className="text-sm text-dark-200">{t('roomCode')}</p>
+          <p className="text-sm font-medium text-dark-300 flex items-center gap-1">
+            <Users className="w-4 h-4 text-primary" />
+            {t('playersCount', { count: playerCount })}
+          </p>
+        </div>
         <div className="flex items-center gap-3">
           <span
             className="text-2xl md:text-3xl font-mono font-bold tracking-widest text-primary bg-primary/10 px-4 py-2 rounded-lg"

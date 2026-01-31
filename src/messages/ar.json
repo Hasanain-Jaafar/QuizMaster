@@ -33,7 +33,8 @@
   "createRoom": {
     "creatingRoom": "جاري إنشاء الغرفة…",
     "roomCreated": "تم إنشاء الغرفة",
-    "shareCode": "شارك هذا الرمز مع اللاعب الآخر. عندما يكون كلاكما جاهزين، اختر فئة وابدأ.",
+    "shareCode": "شارك هذا الرمز مع الآخرين. عندما يكون الجميع جاهزين، اختر فئة وابدأ.",
+    "playersCount": "{count} / 6 لاعبين",
     "roomCode": "رمز الغرفة",
     "yourName": "اسمك",
     "yourNamePlaceholder": "مثال: أحمد",
@@ -44,7 +45,8 @@
   },
   "joinRoom": {
     "joinRoom": "الانضمام إلى غرفة",
-    "enterCode": "أدخل الرمز المكوّن من 6 أحرف من المضيف.",
+    "enterCode": "أدخل الرمز المكوّن من 6 أحرف من المضيف. حتى 6 لاعبين.",
+    "playersCount": "{count} / 6 لاعبين",
     "roomCode": "رمز الغرفة",
     "yourName": "اسمك",
     "yourNamePlaceholder": "مثال: سارة",
@@ -130,6 +132,7 @@
     "yourScore": "نتيجتك:",
     "player1Label": "اللاعب 1:",
     "player2Label": "اللاعب 2:",
+    "playerLabel": "اللاعب {n}:",
     "waitingForOtherPlayer": "في انتظار اللاعب الآخر…",
     "syncingResults": "جاري مزامنة النتائج…",
     "otherPlayerLeft": "غادر اللاعب الآخر الغرفة أو أعاد تشغيل اللعبة.",

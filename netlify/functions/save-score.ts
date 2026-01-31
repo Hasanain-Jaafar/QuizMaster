@@ -6,7 +6,8 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-type Body = { playerId: 'player1' | 'player2'; score: number; total: number; category: string };
+const PLAYER_IDS = ['player0', 'player1', 'player2', 'player3', 'player4', 'player5'] as const;
+type Body = { playerId: string; score: number; total: number; category: string };
 
 export async function handler(event: { httpMethod: string; body?: string }) {
   connectLambda(event);
@@ -28,8 +29,8 @@ export async function handler(event: { httpMethod: string; body?: string }) {
   if (!playerId || typeof score !== 'number' || typeof total !== 'number' || !category) {
     return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Missing playerId, score, total, or category' }) };
   }
-  if (playerId !== 'player1' && playerId !== 'player2') {
-    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'playerId must be player1 or player2' }) };
+  if (!PLAYER_IDS.includes(playerId as (typeof PLAYER_IDS)[number])) {
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'playerId must be player0 through player5' }) };
   }
 
   const store = getStore('quiz-data');

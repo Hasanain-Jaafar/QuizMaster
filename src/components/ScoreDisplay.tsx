@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "@/contexts/QuizContext";
+import { ROOM_MAX_PLAYERS } from "@/types/quiz";
 import { useTranslations } from "next-intl";
 import {
   Trophy,
@@ -30,6 +31,7 @@ export default function ScoreDisplay() {
     selectedPlayer,
     selectedCategory,
     roomData,
+    myPlayerIndex,
     myPlayerName,
     updateRoom,
     getRoom,
@@ -40,36 +42,33 @@ export default function ScoreDisplay() {
 
   const reportedRef = useRef(false);
   const savedRef = useRef(false);
-  const [hadBothPlayers, setHadBothPlayers] = useState(false);
+  const [hadMultiplePlayers, setHadMultiplePlayers] = useState(false);
+  const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
   useEffect(() => {
-    if (roomData?.player1 && roomData?.player2) {
-      queueMicrotask(() => setHadBothPlayers(true));
+    if (playerCount >= 2) {
+      queueMicrotask(() => setHadMultiplePlayers(true));
     }
-  }, [roomData?.player1, roomData?.player2]);
+  }, [playerCount]);
 
-  // Room: report our score (P1 or P2) once, with optional name
+  // Room: report our score (by slot) once, with optional name
   useEffect(() => {
     if (!quizCompleted || reportedRef.current || !selectedCategory) return;
+    if (gameMode !== "create_room" && gameMode !== "join_room") return;
+    if (myPlayerIndex == null) return;
     const name = myPlayerName?.trim() || undefined;
-    if (gameMode === "create_room") {
-      updateRoom({ player1: { score, total: totalQuestions, name } }).finally(
-        () => {
-          reportedRef.current = true;
-        },
-      );
-    } else if (gameMode === "join_room") {
-      updateRoom({ player2: { score, total: totalQuestions, name } }).finally(
-        () => {
-          reportedRef.current = true;
-        },
-      );
-    }
+    updateRoom({
+      playerIndex: myPlayerIndex,
+      player: { score, total: totalQuestions, name },
+    }).finally(() => {
+      reportedRef.current = true;
+    });
   }, [
     quizCompleted,
     gameMode,
     selectedCategory,
     score,
     totalQuestions,
+    myPlayerIndex,
     myPlayerName,
     updateRoom,
   ]);
@@ -82,7 +81,7 @@ export default function ScoreDisplay() {
     return () => clearInterval(id);
   }, [gameMode, getRoom]);
 
-  // 2-Player: save and load scores once
+  // 2-Player: save and load scores once (player1 -> index 0, player2 -> index 1)
   useEffect(() => {
     if (
       !quizCompleted ||
@@ -92,7 +91,8 @@ export default function ScoreDisplay() {
       !selectedCategory
     )
       return;
-    saveScore(selectedPlayer, score, totalQuestions, selectedCategory).finally(
+    const playerIndex = selectedPlayer === "player1" ? 0 : 1;
+    saveScore(playerIndex, score, totalQuestions, selectedCategory).finally(
       () => {
         loadScores().finally(() => {
           savedRef.current = true;
@@ -194,17 +194,17 @@ export default function ScoreDisplay() {
             <div className="flex flex-wrap gap-4 text-sm">
               <span>
                 {t("player1Label")}{" "}
-                {playerScores?.player1?.history?.length
-                  ? `${playerScores.player1.history.slice(-1)[0].score}/${
-                      playerScores.player1.history.slice(-1)[0].total
+                {playerScores?.player0?.history?.length
+                  ? `${playerScores.player0.history.slice(-1)[0].score}/${
+                      playerScores.player0.history.slice(-1)[0].total
                     }`
                   : "—"}
               </span>
               <span>
                 {t("player2Label")}{" "}
-                {playerScores?.player2?.history?.length
-                  ? `${playerScores.player2.history.slice(-1)[0].score}/${
-                      playerScores.player2.history.slice(-1)[0].total
+                {playerScores?.player1?.history?.length
+                  ? `${playerScores.player1.history.slice(-1)[0].score}/${
+                      playerScores.player1.history.slice(-1)[0].total
                     }`
                   : "—"}
               </span>
@@ -212,44 +212,38 @@ export default function ScoreDisplay() {
           </div>
         )}
 
-        {/* Multiplayer: Room comparison */}
+        {/* Multiplayer: Room comparison (up to 6 players) */}
         {(gameMode === "create_room" || gameMode === "join_room") && (
           <div className="p-4 md:p-5 bg-white/60 rounded-xl border border-primary/20">
             <h3 className="flex items-center gap-2 font-semibold text-dark-300 mb-3">
               <Users className="w-5 h-5 text-primary" />
               {t("roomResults")}
             </h3>
-            {roomData?.player1 || roomData?.player2 ? (
+            {playerCount > 0 ? (
               <div>
-                {(gameMode === "create_room" && roomData?.player1 && !roomData?.player2 && hadBothPlayers) ||
-                (gameMode === "join_room" && roomData?.player2 && !roomData?.player1 && hadBothPlayers) ? (
+                {hadMultiplePlayers && playerCount < 2 ? (
                   <p className="text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-sm font-medium mb-3">
                     {t("otherPlayerLeft")}
                   </p>
                 ) : null}
                 <div className="flex flex-wrap gap-4 text-sm">
-                  <span>
-                    <strong>
-                      {roomData?.player1?.name
-                        ? `${roomData.player1.name}:`
-                        : t("player1Label")}
-                    </strong>{" "}
-                    {roomData?.player1
-                      ? `${roomData.player1.score}/${roomData.player1.total}`
-                      : "—"}
-                  </span>
-                  <span>
-                    <strong>
-                      {roomData?.player2?.name
-                        ? `${roomData.player2.name}:`
-                        : t("player2Label")}
-                    </strong>{" "}
-                    {roomData?.player2
-                      ? `${roomData.player2.score}/${roomData.player2.total}`
-                      : "—"}
-                  </span>
+                  {Array.from({ length: ROOM_MAX_PLAYERS }, (_, i) => {
+                    const p = roomData?.players?.[i];
+                    const label = t("playerLabel", { n: i + 1 });
+                    return (
+                      <span key={i}>
+                        <strong>
+                          {p?.name ? `${p.name}:` : label}
+                        </strong>{" "}
+                        {p != null && p.score >= 0 && p.total > 0
+                          ? `${p.score}/${p.total}`
+                          : "—"}
+                      </span>
+                    );
+                  })}
                 </div>
-                {(!roomData?.player1 || !roomData?.player2) && !hadBothPlayers && (
+                {playerCount > 0 &&
+                  roomData?.players?.some((p) => p != null && (p.score < 0 || p.total === 0)) && (
                   <p className="text-dark-200 flex items-center gap-2 mt-2 text-xs">
                     <Loader2 className="w-3 h-3 animate-spin" />
                     {t("syncingResults")}
