@@ -9,7 +9,7 @@ const CORS = {
 const PLAYER_IDS = ['player0', 'player1', 'player2', 'player3', 'player4', 'player5'] as const;
 type Body = { playerId: string; score: number; total: number; category: string };
 
-export async function handler(event: { httpMethod: string; body?: string }) {
+export async function handler(event: any) {
   connectLambda(event);
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
@@ -36,7 +36,7 @@ export async function handler(event: { httpMethod: string; body?: string }) {
   const store = getStore('quiz-data');
   const key = `scores:${playerId}`;
   const existing = (await store.get(key, { type: 'json' })) as { history?: { score: number; total: number; category: string; date: string }[] } | null;
-  const history = Array.isArray(existing?.history) ? existing.history : [];
+  const history = (existing && Array.isArray(existing.history)) ? existing.history : [];
   history.push({ score, total, category, date: new Date().toISOString() });
   await store.setJSON(key, { history });
 

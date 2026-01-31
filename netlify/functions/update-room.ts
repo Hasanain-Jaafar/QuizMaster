@@ -26,7 +26,7 @@ type Body = {
   player?: RoomPlayer;
 };
 
-export async function handler(event: { httpMethod: string; body?: string }) {
+export async function handler(event: any) {
   connectLambda(event);
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
@@ -49,13 +49,13 @@ export async function handler(event: { httpMethod: string; body?: string }) {
   }
 
   const store = getStore('quiz-data');
-  const raw = await store.get(`room:${code}`, { type: 'json' });
-  if (!raw) {
+  const storedRoom = await store.get(`room:${code}`, { type: 'json' });
+  if (!storedRoom) {
     return { statusCode: 404, headers: CORS, body: JSON.stringify({ error: 'Room not found' }) };
   }
-  const r = raw as Record<string, unknown>;
-  const legacy = raw as { player1?: RoomPlayer; player2?: RoomPlayer };
-  let existing: Room = raw as Room;
+  const r = storedRoom as Record<string, unknown>;
+  const legacy = storedRoom as { player1?: RoomPlayer; player2?: RoomPlayer };
+  let existing: Room = storedRoom as Room;
   if (!Array.isArray(r.players) || r.players.length < ROOM_MAX_PLAYERS) {
     existing = {
       code: (r.code as string) ?? '',

@@ -9,7 +9,7 @@ const CORS = {
 type ScoreEntry = { score: number; total: number; category: string; date: string };
 type PlayerData = { history: ScoreEntry[] };
 
-export async function handler(event: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
+export async function handler(event: any) {
   connectLambda(event);
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };

@@ -13,7 +13,7 @@ function randomCode(): string {
   return s;
 }
 
-export async function handler(event: { httpMethod: string }) {
+export async function handler(event: any) {
   connectLambda(event);
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };

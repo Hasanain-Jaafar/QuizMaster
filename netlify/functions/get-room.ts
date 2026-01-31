@@ -35,7 +35,7 @@ function normalizeRoom(raw: unknown): Room {
   };
 }
 
-export async function handler(event: { httpMethod: string; queryStringParameters?: Record<string, string | undefined> | null }) {
+export async function handler(event: any) {
   connectLambda(event);
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: CORS, body: '' };
