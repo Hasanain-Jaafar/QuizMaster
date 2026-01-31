@@ -289,15 +289,15 @@ export default function ScoreDisplay() {
         )}
 
         {/* Question Review Grid */}
-        <div className="pt-8 border-t border-gray-200">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-bold text-dark-300">
+        <div className="pt-6 md:pt-8 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-2">
+            <h3 className="text-lg md:text-xl font-bold text-dark-300">
               {t("questionReview")}
             </h3>
-            <p className="text-dark-200 text-sm">{t("clickToReview")}</p>
+            <p className="text-dark-200 text-xs md:text-sm">{t("clickToReview")}</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-4">
             {questions.map((question, index) => {
               const userAnswer = userAnswers[index];
               const isCorrect = userAnswer === question.correctAnswer;
@@ -310,7 +310,7 @@ export default function ScoreDisplay() {
                     enterReviewMode();
                     goToQuestion(index);
                   }}
-                  className={`p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 ${
+                  className={`p-2 md:p-4 rounded-lg md:rounded-xl flex flex-col items-center justify-center gap-1 md:gap-2 transition-all hover:scale-105 active:scale-95 ${
                     isAnswered
                       ? isCorrect
                         ? "bg-green-50 border border-green-200 hover:bg-green-100"
@@ -326,7 +326,7 @@ export default function ScoreDisplay() {
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    className={`w-8 h-8 md:w-10 md:h-10 rounded-md md:rounded-lg flex items-center justify-center ${
                       isAnswered
                         ? isCorrect
                           ? "bg-green-100 text-green-700"
@@ -334,13 +334,13 @@ export default function ScoreDisplay() {
                         : "bg-gray-100 text-gray-600"
                     }`}
                   >
-                    <span className="font-bold">{index + 1}</span>
+                    <span className="font-bold text-sm md:text-base">{index + 1}</span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <span className="text-sm font-medium">Q{index + 1}</span>
+                    <span className="text-xs md:text-sm font-medium">Q{index + 1}</span>
                     <div
-                      className={`flex items-center gap-1 text-xs ${
+                      className={`flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs ${
                         isAnswered
                           ? isCorrect
                             ? "text-green-600"
@@ -351,21 +351,21 @@ export default function ScoreDisplay() {
                       {isAnswered ? (
                         <>
                           {isCorrect ? (
-                            <CheckCircle className="w-3 h-3" />
+                            <CheckCircle className="w-2.5 h-2.5 md:w-3 md:h-3" />
                           ) : (
-                            <XCircle className="w-3 h-3" />
+                            <XCircle className="w-2.5 h-2.5 md:w-3 md:h-3" />
                           )}
-                          <span>{isCorrect ? t("correct") : t("wrong")}</span>
+                          <span className="hidden sm:inline">{isCorrect ? t("correct") : t("wrong")}</span>
                         </>
                       ) : (
-                        <span>{t("unanswered")}</span>
+                        <span className="hidden sm:inline">{t("unanswered")}</span>
                       )}
                     </div>
                   </div>
 
                   {/* Answer indicator */}
                   {isAnswered && (
-                    <div className="text-xs text-dark-300 font-medium">
+                    <div className="text-[10px] md:text-xs text-dark-300 font-medium">
                       {t("your")} {String.fromCharCode(65 + userAnswer)}
                     </div>
                   )}

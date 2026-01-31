@@ -67,19 +67,38 @@ export async function handler(event: any) {
       const leaderboardKey = 'leaderboard:global';
       const leaderboardRaw = await store.get(leaderboardKey, { type: 'json' });
       const leaderboardData = leaderboardRaw as { entries?: LeaderboardEntry[] } | null;
-      const entries = (leaderboardData && Array.isArray(leaderboardData.entries)) ? leaderboardData.entries : [];
+      let entries = (leaderboardData && Array.isArray(leaderboardData.entries)) ? leaderboardData.entries : [];
       
-      // Add new entry
+      // Calculate new score data
       const timestamp = Date.now();
       const percentage = total > 0 ? (score / total) * 100 : 0;
-      entries.push({
+      const newEntry: LeaderboardEntry = {
         name: sanitizedName,
         score,
         total,
         category,
         timestamp,
         percentage,
-      });
+      };
+
+      // Check if player already exists in leaderboard
+      const existingIndex = entries.findIndex((entry) => entry.name.toLowerCase() === sanitizedName.toLowerCase());
+      
+      if (existingIndex !== -1) {
+        // Player exists - keep only the better score
+        const existingEntry = entries[existingIndex];
+        if (percentage > existingEntry.percentage) {
+          // New score is better, replace the old one
+          entries[existingIndex] = newEntry;
+        } else if (percentage === existingEntry.percentage && score > existingEntry.score) {
+          // Same percentage but higher raw score (e.g., 9/10 vs 8/9)
+          entries[existingIndex] = newEntry;
+        }
+        // Otherwise keep the existing better score
+      } else {
+        // Player doesn't exist, add new entry
+        entries.push(newEntry);
+      }
 
       // Clean up entries older than 7 days
       const sevenDaysAgo = timestamp - (7 * 24 * 60 * 60 * 1000);
