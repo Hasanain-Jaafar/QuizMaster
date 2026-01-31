@@ -158,6 +158,13 @@
       "keepFeedback": "Varje försök är en lärandemöjlighet. Försök igen!"
     }
   },
+  "leaderboard": {
+    "title": "Bästa resultat idag",
+    "emptyState": "Bli först att sätta ett rekord idag!",
+    "loading": "Laddar topplista...",
+    "rank": "#{rank}",
+    "scoreFormat": "{score}/{total}"
+  },
   "optionButton": {
     "correct": "Rätt!",
     "incorrect": "Fel",

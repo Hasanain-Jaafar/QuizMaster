@@ -44,7 +44,7 @@ interface QuizContextType extends QuizState {
   joinRoom: (code: string) => Promise<{ ok: true } | { ok: false; error: string }>;
   getRoom: () => Promise<RoomData | null>;
   updateRoom: (updates: { category?: string; status?: RoomData['status']; playerIndex?: number; player?: RoomData['players'][0] }) => Promise<boolean>;
-  saveScore: (playerIndex: number, score: number, total: number, category: string) => Promise<boolean>;
+  saveScore: (playerIndex: number, score: number, total: number, category: string, name?: string) => Promise<boolean>;
   loadScores: () => Promise<boolean>;
   resetToModeSelection: () => void;
 }
@@ -201,13 +201,13 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   }, [roomCode]);
 
-  const saveScore = useCallback(async (playerIndex: number, score: number, total: number, category: string): Promise<boolean> => {
+  const saveScore = useCallback(async (playerIndex: number, score: number, total: number, category: string, name?: string): Promise<boolean> => {
     const playerId = `player${playerIndex}`;
     try {
       const res = await fetch(`${API}/save-score`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, score, total, category }),
+        body: JSON.stringify({ playerId, score, total, category, name }),
       });
       if (res.status === 404) setMultiplayerError('Multiplayer requires Netlify or netlify dev.');
       return res.ok;

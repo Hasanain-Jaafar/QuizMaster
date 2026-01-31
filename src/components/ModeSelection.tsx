@@ -10,12 +10,13 @@ export default function ModeSelection() {
 
   return (
     <div className="w-full max-w-4xl mx-auto min-w-0">
-      <div className="mb-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">{t('chooseGameMode')}</h2>
-        <p className="text-dark-200 text-sm md:text-base">
-          {t('subtitle')}
-        </p>
-      </div>
+      <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">{t('chooseGameMode')}</h2>
+          <p className="text-dark-200 text-sm md:text-base">
+            {t('subtitle')}
+          </p>
+        </div>
 
       {multiplayerError && (
         <div
@@ -86,6 +87,7 @@ export default function ModeSelection() {
             <div className="text-sm text-dark-200 wrap-break-word line-clamp-2">{t('joinRoomDesc')}</div>
           </div>
         </button>
+      </div>
       </div>
     </div>
   );

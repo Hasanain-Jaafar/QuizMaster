@@ -158,6 +158,13 @@
       "keepFeedback": "Every attempt is a learning opportunity. Try again!"
     }
   },
+  "leaderboard": {
+    "title": "Top Performers Today",
+    "emptyState": "Be the first to set a record today!",
+    "loading": "Loading leaderboard...",
+    "rank": "#{rank}",
+    "scoreFormat": "{score}/{total}"
+  },
   "optionButton": {
     "correct": "Correct!",
     "incorrect": "Incorrect",

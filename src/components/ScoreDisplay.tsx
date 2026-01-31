@@ -92,6 +92,7 @@ export default function ScoreDisplay() {
     )
       return;
     const playerIndex = selectedPlayer === "player1" ? 0 : 1;
+    // Don't pass name for 2-player mode (local multiplayer on same device)
     saveScore(playerIndex, score, totalQuestions, selectedCategory).finally(
       () => {
         loadScores().finally(() => {
@@ -108,6 +109,34 @@ export default function ScoreDisplay() {
     totalQuestions,
     saveScore,
     loadScores,
+  ]);
+
+  // Solo/Room: save to leaderboard with name
+  useEffect(() => {
+    if (!quizCompleted || savedRef.current) return;
+    if (gameMode !== 'solo' && gameMode !== 'create_room' && gameMode !== 'join_room') return;
+    if (!selectedCategory) return;
+    
+    // For solo mode, we can save anonymously or skip leaderboard
+    // For room modes, use the player's name if available
+    const name = (gameMode === 'create_room' || gameMode === 'join_room') 
+      ? myPlayerName?.trim() || undefined 
+      : undefined; // Solo players won't appear on leaderboard without a name
+    
+    // Save with playerIndex 0 for solo, or actual index for room modes
+    const playerIndex = myPlayerIndex ?? 0;
+    saveScore(playerIndex, score, totalQuestions, selectedCategory, name).finally(() => {
+      savedRef.current = true;
+    });
+  }, [
+    quizCompleted,
+    gameMode,
+    selectedCategory,
+    score,
+    totalQuestions,
+    myPlayerIndex,
+    myPlayerName,
+    saveScore,
   ]);
 
   if (!quizCompleted) return null;

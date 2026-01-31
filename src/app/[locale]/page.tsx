@@ -1,6 +1,7 @@
 'use client';
 
 import Quiz from '@/components/Quiz';
+import Leaderboard from '@/components/Leaderboard';
 import { QuizProvider } from '@/contexts/QuizContext';
 import { Link } from '@/i18n/navigation';
 import { useLocale, useTranslations } from 'next-intl';
@@ -112,10 +113,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+            <div className="lg:col-span-1 space-y-6">
+              <div className="bg-white rounded-xl shadow-lg p-6">
                 <button
                   type="button"
                   onClick={() => setInstructionsOpen((o) => !o)}
@@ -187,6 +188,9 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              
+              {/* Leaderboard */}
+              <Leaderboard />
             </div>
 
             {/* Quiz Area */}

@@ -158,6 +158,13 @@
       "keepFeedback": "كل محاولة فرصة للتعلم. جرّب مجدداً!"
     }
   },
+  "leaderboard": {
+    "title": "أفضل اللاعبين اليوم",
+    "emptyState": "كن أول من يسجل رقماً قياسياً اليوم!",
+    "loading": "جاري تحميل لوحة المتصدرين...",
+    "rank": "#{rank}",
+    "scoreFormat": "{score}/{total}"
+  },
   "optionButton": {
     "correct": "صحيح!",
     "incorrect": "خطأ",

@@ -50,3 +50,16 @@ export interface PlayerScores {
   player4?: { history: ScoreHistoryEntry[] };
   player5?: { history: ScoreHistoryEntry[] };
 }
+
+export interface LeaderboardEntry {
+  name: string;
+  score: number;
+  total: number;
+  category: string;
+  timestamp: number;
+  percentage: number;
+}
+
+export interface LeaderboardData {
+  entries: LeaderboardEntry[];
+}
