@@ -65,8 +65,8 @@ export default function CategorySelection() {
 
   const handlePick = async (categoryId: string) => {
     if (gameMode === 'create_room' && roomCode) {
-      const ok = await updateRoom({ category: categoryId, status: 'started' });
-      if (ok) startQuiz(categoryId);
+      await updateRoom({ category: categoryId, status: 'started' });
+      startQuiz(categoryId);
     } else {
       startQuiz(categoryId);
     }

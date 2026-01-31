@@ -19,6 +19,7 @@ export default function CreateRoomView() {
     setMyPlayerName,
     myPlayerName,
     clearMultiplayerError,
+    multiplayerError,
   } = useQuiz();
   const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
   const [creating, setCreating] = useState(false);
@@ -61,7 +62,29 @@ export default function CreateRoomView() {
   }
 
   if (!roomCode) {
-    return null;
+    return (
+      <div className="w-full max-w-xl mx-auto py-12 px-4 text-center">
+        {multiplayerError && (
+          <p className="text-red-600 text-sm mb-4" role="alert">{multiplayerError}</p>
+        )}
+        <p className="text-dark-200 mb-4">{t('pickCategoryAndStart')}</p>
+        <button
+          type="button"
+          onClick={() => setGameMode('solo')}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary/90"
+        >
+          <ArrowRight className="w-5 h-5" />
+          {t('pickCategoryAndStart')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setGameMode(null)}
+          className="block mt-4 text-sm text-dark-200 hover:text-primary underline"
+        >
+          {t('cancel')}
+        </button>
+      </div>
+    );
   }
 
   return (
