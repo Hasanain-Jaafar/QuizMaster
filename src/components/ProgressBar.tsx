@@ -4,33 +4,33 @@ import { useQuiz } from '@/contexts/QuizContext';
 
 export default function ProgressBar() {
   const { currentQuestionIndex, totalQuestions, userAnswers } = useQuiz();
-  const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+  const answeredCount = userAnswers.filter((a) => a !== -1).length;
+  const progress = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
 
   return (
     <div className="w-full space-y-2">
       <div className="flex justify-between text-sm text-gray-600">
         <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-        <span>{Math.round(progress)}% Complete</span>
+        <span>{answeredCount}/{totalQuestions} answered · {Math.round(progress)}%</span>
       </div>
-      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-linear-to-r from-blue-500 to-purple-600 transition-all duration-500 ease-out"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-      <div className="flex space-x-1">
-        {Array.from({ length: totalQuestions }).map((_, index) => (
-          <div
-            key={index}
-            className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-              index <= currentQuestionIndex
-                ? userAnswers[index] === -1
-                  ? 'bg-blue-400'
-                  : 'bg-green-500'
-                : 'bg-gray-200'
-            }`}
-          />
-        ))}
+      <div className="flex gap-0.5">
+        {Array.from({ length: totalQuestions }).map((_, index) => {
+          const isAnswered = userAnswers[index] !== -1;
+          const isCurrent = index === currentQuestionIndex;
+          return (
+            <div
+              key={index}
+              className={`h-1.5 flex-1 rounded-sm transition-all duration-300 ${
+                isAnswered
+                  ? 'bg-green-500'
+                  : isCurrent
+                    ? 'bg-primary'
+                    : 'bg-gray-200'
+              }`}
+              title={isAnswered ? `Question ${index + 1} answered` : `Question ${index + 1} not answered`}
+            />
+          );
+        })}
       </div>
     </div>
   );

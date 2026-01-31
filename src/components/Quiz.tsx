@@ -44,7 +44,7 @@ export default function Quiz() {
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-6 md:space-y-8">
           <ScoreDisplay />
-          <div className="flex justify-center">
+          <div className="w-full">
             <QuestionNavigation />
           </div>
         </div>
@@ -62,8 +62,9 @@ function QuizRun() {
   const currentQuestion = questions[currentQuestionIndex];
   const userAnswer = userAnswers[currentQuestionIndex];
   const hasAnswered = userAnswer !== -1;
-  const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
   const allAnswered = userAnswers.every(answer => answer !== -1);
+  const showFinalQuestion = isLastQuestion && allAnswered;
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="space-y-6 md:space-y-8 animate-fade-in">
@@ -80,7 +81,7 @@ function QuizRun() {
             <div className="flex-1">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-dark-300">
                 {t('questionOf', { current: currentQuestionIndex + 1, total: questions.length })}
-                {isLastQuestion && <span className="ml-2 text-accent">{t('lastQuestion')}</span>}
+                {showFinalQuestion && <span className="ml-2 text-accent">{t('lastQuestion')}</span>}
               </h1>
               <p className="text-dark-200 mt-1 text-sm md:text-base">
                 {reviewMode ? t('reviewAnswer') : t('selectAnswer')}
@@ -95,8 +96,8 @@ function QuizRun() {
                 <span className="text-sm md:text-base">{t('answered')}</span>
               </div>
               
-              {/* Last Question Indicator */}
-              {isLastQuestion && (
+              {/* Last Question Indicator - only when on last question and all answered */}
+              {showFinalQuestion && (
                 <div className="flex items-center gap-2 px-3 py-2 bg-accent/20 text-accent rounded-lg border border-accent/30">
                   <Trophy className="w-4 h-4" />
                   <span className="text-sm font-medium">{t('finalQuestion')}</span>
@@ -117,7 +118,7 @@ function QuizRun() {
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-4 md:mb-6">
                 <div className={`flex items-center justify-center w-10 h-10 md:w-12 md:h-12 border  border-primary/40 rounded-lg shadow-md bg-primary/10${
-                  isLastQuestion ? 'bg-gradient-accent' : 'bg-gradient-primary'
+                  showFinalQuestion ? 'bg-gradient-accent' : 'bg-gradient-primary'
                 }`}>
                   <span className=" text-primary  font-bold text-lg md:text-xl">
                     {currentQuestionIndex + 1}
@@ -139,7 +140,7 @@ function QuizRun() {
                       {userAnswer === currentQuestion.correctAnswer ? t('correct') : t('incorrect')}
                     </span>
                   )}
-                  {isLastQuestion && (
+                  {showFinalQuestion && (
                     <span className="px-2 py-1 bg-accent/10 text-accent text-xs md:text-sm font-semibold rounded-lg">
                       {t('finalQuestion')}
                     </span>
