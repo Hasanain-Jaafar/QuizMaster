@@ -32,7 +32,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
 
   // Color states based on answer status
   const getButtonStyles = () => {
-    const baseStyles = 'w-full p-4 md:p-6 rounded-xl md:rounded-xl text-left transition-all duration-300 border-2 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md active:scale-[0.98] ';
+    const baseStyles = 'w-full p-4 md:p-6 rounded-xl md:rounded-xl text-start transition-all duration-300 border-2 flex items-center gap-3 md:gap-4 shadow-sm hover:shadow-md active:scale-[0.98] ';
     
     if (!isAnswered) {
       return baseStyles + (
@@ -148,7 +148,7 @@ export default function OptionButton({ option, index }: OptionButtonProps) {
         {getStatusIcon() || getLetter()}
       </div>
       
-      <div className="flex-1 text-left">
+      <div className="flex-1 text-start">
         <span className="text-sm md:text-base font-medium">{option}</span>
       </div>
       

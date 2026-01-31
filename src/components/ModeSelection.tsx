@@ -37,7 +37,7 @@ export default function ModeSelection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 w-full">
         <button
           onClick={() => setGameMode('solo')}
-          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
+          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <User className="w-6 h-6" />
@@ -50,7 +50,7 @@ export default function ModeSelection() {
 
         <button
           onClick={() => setGameMode('2player')}
-          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
+          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <Users className="w-6 h-6" />
@@ -63,7 +63,7 @@ export default function ModeSelection() {
 
         <button
           onClick={() => setGameMode('create_room')}
-          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
+          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <PlusCircle className="w-6 h-6" />
@@ -76,7 +76,7 @@ export default function ModeSelection() {
 
         <button
           onClick={() => setGameMode('join_room')}
-          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
+          className="w-full min-w-0 p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] overflow-hidden"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <LogIn className="w-6 h-6" />

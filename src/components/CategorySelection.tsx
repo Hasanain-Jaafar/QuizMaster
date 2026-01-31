@@ -99,7 +99,7 @@ export default function CategorySelection() {
               key={cat.id}
               onClick={() => handlePick(cat.id)}
               className={`
-                p-4 md:p-5 rounded-xl text-left transition-all
+                p-4 md:p-5 rounded-xl text-start transition-all
                 flex items-center gap-4
                 border-2
                 ${isAll

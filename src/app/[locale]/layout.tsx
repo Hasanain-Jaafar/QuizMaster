@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import LocaleDirectionSync from '@/components/LocaleDirectionSync';
 
 function hasLocale(locales: readonly string[], locale: string): boolean {
   return locales.includes(locale);
@@ -25,6 +26,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     return (
       <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
+        <LocaleDirectionSync />
         <div className={locale === 'ar' ? 'font-zain' : ''}>
           {children}
         </div>

@@ -20,7 +20,7 @@ export default function PlayerSelect() {
       <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         <button
           onClick={() => setSelectedPlayer('player1')}
-          className="p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] flex-1"
+          className="p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] flex-1"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <User className="w-6 h-6" />
@@ -33,7 +33,7 @@ export default function PlayerSelect() {
 
         <button
           onClick={() => setSelectedPlayer('player2')}
-          className="p-4 md:p-5 rounded-xl text-left transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] flex-1"
+          className="p-4 md:p-5 rounded-xl text-start transition-all flex items-center gap-4 border-2 bg-white border-light-300 hover:border-primary/50 hover:bg-primary/5 shadow-sm hover:shadow-md active:scale-[0.99] flex-1"
         >
           <div className="shrink-0 w-12 h-12 rounded-xl flex items-center justify-center bg-primary/10 text-primary">
             <User className="w-6 h-6" />

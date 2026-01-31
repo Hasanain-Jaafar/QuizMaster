@@ -119,7 +119,7 @@ export default function Home() {
                 <button
                   type="button"
                   onClick={() => setInstructionsOpen((o) => !o)}
-                  className="w-full flex items-center justify-between text-left gap-2 group"
+                  className="w-full flex items-center justify-between text-start gap-2 group"
                   aria-expanded={instructionsOpen}
                   aria-controls="quiz-instructions-content"
                   id="quiz-instructions-toggle"
@@ -146,31 +146,31 @@ export default function Home() {
                 >
                   <div className="overflow-hidden">
                     <ul className="space-y-4 mt-4">
-                      <li className="flex items-start space-x-3">
+                      <li className="flex items-start gap-3">
                         <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 text-sm font-bold">1</span>
                         </div>
                         <span className="text-gray-600">{t('instruction1')}</span>
                       </li>
-                      <li className="flex items-start space-x-3">
+                      <li className="flex items-start gap-3">
                         <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 text-sm font-bold">2</span>
                         </div>
                         <span className="text-gray-600">{t('instruction2')}</span>
                       </li>
-                      <li className="flex items-start space-x-3">
+                      <li className="flex items-start gap-3">
                         <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 text-sm font-bold">3</span>
                         </div>
                         <span className="text-gray-600">{t('instruction3')}</span>
                       </li>
-                      <li className="flex items-start space-x-3">
+                      <li className="flex items-start gap-3">
                         <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 text-sm font-bold">4</span>
                         </div>
                         <span className="text-gray-600">{t('instruction4')}</span>
                       </li>
-                      <li className="flex items-start space-x-3">
+                      <li className="flex items-start gap-3">
                         <div className="shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
                           <span className="text-blue-600 text-sm font-bold">5</span>
                         </div>
