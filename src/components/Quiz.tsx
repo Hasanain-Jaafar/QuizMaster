@@ -22,7 +22,6 @@ export default function Quiz() {
     gameMode,
     selectedPlayer,
     roomCode,
-    createRoomContinued,
   } = useQuiz();
 
   // Not in a quiz: show mode selection, player select, create/join room, or category selection
@@ -30,7 +29,8 @@ export default function Quiz() {
     if (gameMode === null) return <ModeSelection />;
     if (gameMode === '2player' && selectedPlayer === null) return <PlayerSelect />;
     if (gameMode === 'create_room') {
-      if (roomCode && createRoomContinued) return <CategorySelection />;
+      // Host can choose category as soon as they have a room code (no extra click required)
+      if (roomCode) return <CategorySelection />;
       return <CreateRoomView />;
     }
     if (gameMode === 'join_room') return <JoinRoomView />;

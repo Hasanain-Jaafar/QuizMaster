@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useQuiz } from '@/contexts/QuizContext';
 import { useTranslations } from 'next-intl';
 import {
@@ -13,6 +14,9 @@ import {
   Utensils,
   Lightbulb,
   Sprout,
+  Copy,
+  Check,
+  Users,
   LucideIcon,
 } from 'lucide-react';
 
@@ -55,7 +59,9 @@ function getCategoryKey(id: string): string {
 export default function CategorySelection() {
   const t = useTranslations('category');
   const tCat = useTranslations('categories');
-  const { categories, startQuiz, gameMode, roomCode, updateRoom, resetToModeSelection } = useQuiz();
+  const tCreate = useTranslations('createRoom');
+  const { categories, startQuiz, gameMode, roomCode, roomData, myPlayerName, setMyPlayerName, getRoom, updateRoom, resetToModeSelection } = useQuiz();
+  const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
 
   const handlePick = async (categoryId: string) => {
     if (gameMode === 'create_room' && roomCode) {
@@ -66,8 +72,68 @@ export default function CategorySelection() {
     }
   };
 
+  const [copied, setCopied] = useState(false);
+
+  // Poll room when host is on category screen so player count updates
+  useEffect(() => {
+    if (gameMode !== 'create_room' || !roomCode) return;
+    getRoom();
+    const id = setInterval(() => getRoom(), 2000);
+    return () => clearInterval(id);
+  }, [gameMode, roomCode, getRoom]);
+
+  const copyCode = () => {
+    if (!roomCode) return;
+    navigator.clipboard.writeText(roomCode).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto">
+      {/* Room code banner for host (create_room) so they can share and enter name while choosing category */}
+      {gameMode === 'create_room' && roomCode && (
+        <div className="mb-6 p-4 md:p-5 bg-white rounded-xl border-2 border-primary/20 shadow-sm">
+          <label htmlFor="create-room-name-cat" className="block text-sm font-medium text-dark-300 mb-2">
+            {tCreate('yourName')}
+          </label>
+          <input
+            id="create-room-name-cat"
+            type="text"
+            value={myPlayerName ?? ''}
+            onChange={(e) => setMyPlayerName(e.target.value.trim() || null)}
+            placeholder={tCreate('yourNamePlaceholder')}
+            className="w-full max-w-xs px-4 py-2 rounded-xl border-2 border-light-300 focus:border-primary focus:outline-none text-dark-300 mb-4"
+            maxLength={32}
+            aria-label={tCreate('yourName')}
+          />
+          <p className="text-sm text-dark-200 mb-2">{tCreate('roomCode')}</p>
+          <div className="flex flex-wrap items-center gap-3">
+            <span
+              className="text-xl md:text-2xl font-mono font-bold tracking-widest text-primary bg-primary/10 px-3 py-2 rounded-lg"
+              aria-label={`${tCreate('roomCode')}: ${roomCode}`}
+            >
+              {roomCode}
+            </span>
+            <button
+              type="button"
+              onClick={copyCode}
+              className="p-2 rounded-lg border border-light-300 hover:bg-primary/5 hover:border-primary/30 flex items-center gap-2"
+              aria-label={tCreate('copy')}
+            >
+              {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-dark-200" />}
+              <span className="text-sm font-medium">{copied ? tCreate('copied') : tCreate('copy')}</span>
+            </button>
+            <span className="text-sm text-dark-300 flex items-center gap-1">
+              <Users className="w-4 h-4 text-primary" />
+              {tCreate('playersCount', { count: playerCount })}
+            </span>
+          </div>
+          <p className="text-xs text-dark-200 mt-2">{tCreate('shareCode')}</p>
+        </div>
+      )}
+
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-bold text-dark-300 mb-2">
           {t('chooseCategory')}
