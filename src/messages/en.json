@@ -131,6 +131,7 @@
     "player1Label": "Player 1:",
     "player2Label": "Player 2:",
     "waitingForOtherPlayer": "Waiting for the other player…",
+    "syncingResults": "Syncing results…",
     "questionReview": "Question Review",
     "clickToReview": "Click any question to review your answer",
     "correct": "Correct",
