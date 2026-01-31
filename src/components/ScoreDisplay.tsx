@@ -227,15 +227,15 @@ export default function ScoreDisplay() {
                   </p>
                 ) : null}
                 <div className="flex flex-wrap gap-4 text-sm">
-                  {Array.from({ length: ROOM_MAX_PLAYERS }, (_, i) => {
-                    const p = roomData?.players?.[i];
+                  {roomData?.players?.map((p, i) => {
+                    if (p == null) return null;
                     const label = t("playerLabel", { n: i + 1 });
                     return (
                       <span key={i}>
                         <strong>
-                          {p?.name ? `${p.name}:` : label}
+                          {p.name ? `${p.name}:` : label}
                         </strong>{" "}
-                        {p != null && p.score >= 0 && p.total > 0
+                        {p.score >= 0 && p.total > 0
                           ? `${p.score}/${p.total}`
                           : "—"}
                       </span>
