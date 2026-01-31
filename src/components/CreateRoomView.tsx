@@ -81,9 +81,9 @@ export default function CreateRoomView() {
           id="create-room-name"
           type="text"
           value={myPlayerName ?? ''}
-          onChange={(e) => setMyPlayerName(e.target.value.trim() || null)}
+          onChange={(e) => setMyPlayerName(e.target.value || null)}
           placeholder={t('yourNamePlaceholder')}
-          className="w-full px-4 py-3 rounded-xl border-2 border-light-300 focus:border-primary focus:outline-none text-dark-300"
+          className="w-full px-4 py-3 rounded-xl border-2 border-light-300 bg-white focus:border-primary focus:outline-none text-dark-300 placeholder:text-dark-100 min-h-[3rem]"
           maxLength={32}
           aria-label={t('yourName')}
         />
