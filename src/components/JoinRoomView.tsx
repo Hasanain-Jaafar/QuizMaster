@@ -21,29 +21,22 @@ export default function JoinRoomView() {
   // Once joined: if category is set, we can start; else poll until it is
   useEffect(() => {
     if (!hasJoined || !roomData) return;
+    
+    // If we already have a category, start immediately
     if (roomData.category) {
-      // Start the quiz
       startQuiz(roomData.category);
       return;
     }
-    // Poll until category is set
+    
+    // Otherwise poll until category is set
     const poll = () => {
-      getRoom().then((r) => {
-        if (r?.category) {
-          startQuiz(r.category);
-          if (pollRef.current) {
-            clearInterval(pollRef.current);
-            pollRef.current = null;
-          }
-        }
-      });
+      getRoom();
     };
-    poll();
-    pollRef.current = setInterval(poll, POLL_MS);
-    return () => {
-      if (pollRef.current) clearInterval(pollRef.current);
-      pollRef.current = null;
-    };
+    
+    poll(); // Poll immediately
+    const id = setInterval(poll, POLL_MS);
+    
+    return () => clearInterval(id);
   }, [hasJoined, roomData, getRoom, startQuiz]);
 
   const handleJoin = async () => {

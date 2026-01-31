@@ -261,7 +261,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   }, [gameMode, roomCode, myPlayerIndex, updateRoom]);
 
-  const startQuiz = (categoryId: string) => {
+  const startQuiz = useCallback((categoryId: string) => {
     const filtered = getQuestionsByCategory(categoryId, locale);
     setCurrentQuestions(filtered);
     setSelectedCategory(categoryId);
@@ -272,7 +272,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       quizCompleted: false,
     });
     setReviewMode(false);
-  };
+  }, [locale]);
 
   const selectAnswer = (optionIndex: number) => {
     if (quizState.quizCompleted || quizState.userAnswers[quizState.currentQuestionIndex] !== -1) {

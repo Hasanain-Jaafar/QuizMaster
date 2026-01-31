@@ -65,11 +65,14 @@ export default function CategorySelection() {
 
   const handlePick = async (categoryId: string) => {
     if (gameMode === 'create_room' && roomCode) {
-      await updateRoom({ category: categoryId, status: 'started' });
-      startQuiz(categoryId);
-    } else {
-      startQuiz(categoryId);
+      // Update room so joiners see the category choice
+      const success = await updateRoom({ category: categoryId, status: 'started' });
+      if (!success) {
+        console.warn('Failed to update room with category, but starting quiz locally');
+      }
     }
+    // Always start the quiz regardless of room update success
+    startQuiz(categoryId);
   };
 
   const [copied, setCopied] = useState(false);
