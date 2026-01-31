@@ -128,7 +128,7 @@ export default function JoinRoomView() {
   if (!roomData?.category) {
     return (
       <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
-        <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+        <Loader2 className="w-32 h-32 text-primary animate-spin mb-4" />
         <p className="text-dark-200 text-center">{t('waitingForP1')}</p>
         <p className="text-sm text-dark-100 mt-2">{t('room')}: {roomCode}</p>
       </div>
@@ -138,7 +138,7 @@ export default function JoinRoomView() {
   // Category is set; startQuiz was called from useEffect. Render a brief loading until Quiz switches to QuizRun
   return (
     <div className="w-full max-w-md mx-auto flex flex-col items-center justify-center py-12">
-      <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+      <Loader2 className="w-32 h-32 text-primary animate-spin mb-4" />
       <p className="text-dark-200">{t('startingQuiz')}</p>
     </div>
   );

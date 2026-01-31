@@ -203,24 +203,33 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetToModeSelection = useCallback(() => {
-    setGameMode(null);
-    setSelectedPlayer(null);
-    setRoomCode(null);
-    setRoomData(null);
-    setMyPlayerName(null);
-    setCreateRoomContinued(false);
-    setPlayerScores(null);
-    setMultiplayerError(null);
-    setSelectedCategory(null);
-    setCurrentQuestions([]);
-    setQuizState({
-      currentQuestionIndex: 0,
-      score: 0,
-      userAnswers: [],
-      quizCompleted: false,
-    });
-    setReviewMode(false);
-  }, []);
+    const doReset = () => {
+      setGameMode(null);
+      setSelectedPlayer(null);
+      setRoomCode(null);
+      setRoomData(null);
+      setMyPlayerName(null);
+      setCreateRoomContinued(false);
+      setPlayerScores(null);
+      setMultiplayerError(null);
+      setSelectedCategory(null);
+      setCurrentQuestions([]);
+      setQuizState({
+        currentQuestionIndex: 0,
+        score: 0,
+        userAnswers: [],
+        quizCompleted: false,
+      });
+      setReviewMode(false);
+    };
+    if (gameMode === 'create_room' && roomCode) {
+      updateRoom({ player1: null }).finally(doReset);
+    } else if (gameMode === 'join_room' && roomCode) {
+      updateRoom({ player2: null }).finally(doReset);
+    } else {
+      doReset();
+    }
+  }, [gameMode, roomCode, updateRoom]);
 
   const startQuiz = (categoryId: string) => {
     const filtered = getQuestionsByCategory(categoryId, locale);

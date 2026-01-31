@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "@/contexts/QuizContext";
 import { useTranslations } from "next-intl";
 import {
@@ -40,6 +40,12 @@ export default function ScoreDisplay() {
 
   const reportedRef = useRef(false);
   const savedRef = useRef(false);
+  const [hadBothPlayers, setHadBothPlayers] = useState(false);
+  useEffect(() => {
+    if (roomData?.player1 && roomData?.player2) {
+      queueMicrotask(() => setHadBothPlayers(true));
+    }
+  }, [roomData?.player1, roomData?.player2]);
 
   // Room: report our score (P1 or P2) once, with optional name
   useEffect(() => {
@@ -68,15 +74,13 @@ export default function ScoreDisplay() {
     updateRoom,
   ]);
 
-  // Room: keep polling until BOTH players have submitted (so each side sees the other's result)
+  // Room: poll so we see the other player's result and detect if they leave or restart
   useEffect(() => {
     if (gameMode !== "create_room" && gameMode !== "join_room") return;
-    if (roomData?.player1 && roomData?.player2) return;
-    // Sync immediately, then poll every second
     getRoom();
     const id = setInterval(() => getRoom(), POLL_MS);
     return () => clearInterval(id);
-  }, [gameMode, roomData?.player1, roomData?.player2, getRoom]);
+  }, [gameMode, getRoom]);
 
   // 2-Player: save and load scores once
   useEffect(() => {
@@ -217,6 +221,12 @@ export default function ScoreDisplay() {
             </h3>
             {roomData?.player1 || roomData?.player2 ? (
               <div>
+                {(gameMode === "create_room" && roomData?.player1 && !roomData?.player2 && hadBothPlayers) ||
+                (gameMode === "join_room" && roomData?.player2 && !roomData?.player1 && hadBothPlayers) ? (
+                  <p className="text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-sm font-medium mb-3">
+                    {t("otherPlayerLeft")}
+                  </p>
+                ) : null}
                 <div className="flex flex-wrap gap-4 text-sm">
                   <span>
                     <strong>
@@ -239,7 +249,7 @@ export default function ScoreDisplay() {
                       : "—"}
                   </span>
                 </div>
-                {(!roomData?.player1 || !roomData?.player2) && (
+                {(!roomData?.player1 || !roomData?.player2) && !hadBothPlayers && (
                   <p className="text-dark-200 flex items-center gap-2 mt-2 text-xs">
                     <Loader2 className="w-3 h-3 animate-spin" />
                     {t("syncingResults")}

@@ -132,6 +132,7 @@
     "player2Label": "اللاعب 2:",
     "waitingForOtherPlayer": "في انتظار اللاعب الآخر…",
     "syncingResults": "جاري مزامنة النتائج…",
+    "otherPlayerLeft": "غادر اللاعب الآخر الغرفة أو أعاد تشغيل اللعبة.",
     "questionReview": "مراجعة الأسئلة",
     "clickToReview": "انقر على أي سؤال لمراجعة إجابتك",
     "correct": "صحيح",

@@ -132,6 +132,7 @@
     "player2Label": "Spelare 2:",
     "waitingForOtherPlayer": "Väntar på den andra spelaren…",
     "syncingResults": "Synkar resultat…",
+    "otherPlayerLeft": "Den andra spelaren lämnade rummet eller startade om spelet.",
     "questionReview": "Frågegranskning",
     "clickToReview": "Klicka på valfri fråga för att granska ditt svar",
     "correct": "Rätt",

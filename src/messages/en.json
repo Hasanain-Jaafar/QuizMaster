@@ -132,6 +132,7 @@
     "player2Label": "Player 2:",
     "waitingForOtherPlayer": "Waiting for the other player…",
     "syncingResults": "Syncing results…",
+    "otherPlayerLeft": "The other player left the room or restarted the game.",
     "questionReview": "Question Review",
     "clickToReview": "Click any question to review your answer",
     "correct": "Correct",
