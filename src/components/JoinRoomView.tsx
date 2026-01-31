@@ -5,7 +5,7 @@ import { useQuiz } from '@/contexts/QuizContext';
 import { useTranslations } from 'next-intl';
 import { Loader2, LogIn } from 'lucide-react';
 
-const POLL_MS = 2500;
+const POLL_MS = 800;
 
 export default function JoinRoomView() {
   const t = useTranslations('joinRoom');

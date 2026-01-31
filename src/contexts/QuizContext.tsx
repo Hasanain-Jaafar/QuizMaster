@@ -167,7 +167,8 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   const getRoom = useCallback(async (): Promise<RoomData | null> => {
     if (!roomCode) return null;
     try {
-      const res = await fetch(`${API}/get-room?code=${encodeURIComponent(roomCode)}`);
+      const url = `${API}/get-room?code=${encodeURIComponent(roomCode)}&t=${Date.now()}`;
+      const res = await fetch(url, { cache: 'no-store' });
       const data = await res.json().catch(() => null);
       if (res.ok && data?.code) {
         setRoomData(data);
