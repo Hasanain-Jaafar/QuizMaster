@@ -165,6 +165,22 @@
     "rank": "#{rank}",
     "scoreFormat": "{score}/{total}"
   },
+  "progress": {
+    "title": "تقدمك",
+    "streak": "السلسلة",
+    "longest": "الأطول",
+    "quizzes": "المسابقات المكتملة",
+    "average": "دقة المتوسط",
+    "dueCount": "مستحق للمراجعة",
+    "practiceDue": "تمرن على الأسئلة المستحقة",
+    "resetProgress": "إعادة تعيين التقدم",
+    "days": "{count} أيام"
+  },
+  "practice": {
+    "practiceMissed": "تمرن على الأسئلة الخاطئة",
+    "practiceDue": "تمرن على الأسئلة المستحقة",
+    "continuelearning": "واصل التعلم"
+  },
   "optionButton": {
     "correct": "صحيح!",
     "incorrect": "خطأ",

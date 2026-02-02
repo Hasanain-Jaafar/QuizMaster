@@ -165,6 +165,22 @@
     "rank": "#{rank}",
     "scoreFormat": "{score}/{total}"
   },
+  "progress": {
+    "title": "Your Progress",
+    "streak": "Streak",
+    "longest": "Longest",
+    "quizzes": "Quizzes completed",
+    "average": "Average accuracy",
+    "dueCount": "Due for review",
+    "practiceDue": "Practice due questions",
+    "resetProgress": "Reset progress",
+    "days": "{count} days"
+  },
+  "practice": {
+    "practiceMissed": "Practice missed questions",
+    "practiceDue": "Practice due questions",
+    "continuelearning": "Continue Learning"
+  },
   "optionButton": {
     "correct": "Correct!",
     "incorrect": "Incorrect",

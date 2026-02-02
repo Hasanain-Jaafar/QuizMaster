@@ -12,12 +12,15 @@ import {
   RotateCcw,
   Loader2,
   Users,
+  BookOpen,
 } from "lucide-react";
+import { getDueCount } from "@/utils/learningStorage";
 
 const POLL_MS = 1000;
 
 export default function ScoreDisplay() {
   const t = useTranslations("score");
+  const tPractice = useTranslations("practice");
   const {
     score,
     totalQuestions,
@@ -38,12 +41,21 @@ export default function ScoreDisplay() {
     saveScore,
     loadScores,
     playerScores,
+    practiceMode,
+    startPracticeDue,
+    startPracticeRecentMistakes,
   } = useQuiz();
 
   const reportedRef = useRef(false);
   const savedRef = useRef(false);
   const [hadMultiplePlayers, setHadMultiplePlayers] = useState(false);
+  const [dueCount, setDueCount] = useState(0);
   const playerCount = roomData?.players?.filter(Boolean).length ?? 0;
+
+  // Update due count on mount and after quiz completion
+  useEffect(() => {
+    setDueCount(getDueCount());
+  }, [quizCompleted]);
   useEffect(() => {
     if (playerCount >= 2) {
       queueMicrotask(() => setHadMultiplePlayers(true));
@@ -98,7 +110,7 @@ export default function ScoreDisplay() {
         loadScores().finally(() => {
           savedRef.current = true;
         });
-      },
+      }
     );
   }, [
     quizCompleted,
@@ -114,18 +126,30 @@ export default function ScoreDisplay() {
   // Solo/Room: save to leaderboard with name
   useEffect(() => {
     if (!quizCompleted || savedRef.current) return;
-    if (gameMode !== 'solo' && gameMode !== 'create_room' && gameMode !== 'join_room') return;
+    if (
+      gameMode !== "solo" &&
+      gameMode !== "create_room" &&
+      gameMode !== "join_room"
+    )
+      return;
     if (!selectedCategory) return;
-    
+
     // For solo mode, we can save anonymously or skip leaderboard
     // For room modes, use the player's name if available
-    const name = (gameMode === 'create_room' || gameMode === 'join_room') 
-      ? myPlayerName?.trim() || undefined 
-      : undefined; // Solo players won't appear on leaderboard without a name
-    
+    const name =
+      gameMode === "create_room" || gameMode === "join_room"
+        ? myPlayerName?.trim() || undefined
+        : undefined; // Solo players won't appear on leaderboard without a name
+
     // Save with playerIndex 0 for solo, or actual index for room modes
     const playerIndex = myPlayerIndex ?? 0;
-    saveScore(playerIndex, score, totalQuestions, selectedCategory, name).finally(() => {
+    saveScore(
+      playerIndex,
+      score,
+      totalQuestions,
+      selectedCategory,
+      name
+    ).finally(() => {
       savedRef.current = true;
     });
   }, [
@@ -261,9 +285,7 @@ export default function ScoreDisplay() {
                     const label = t("playerLabel", { n: i + 1 });
                     return (
                       <span key={i}>
-                        <strong>
-                          {p.name ? `${p.name}:` : label}
-                        </strong>{" "}
+                        <strong>{p.name ? `${p.name}:` : label}</strong>{" "}
                         {p.score >= 0 && p.total > 0
                           ? `${p.score}/${p.total}`
                           : "—"}
@@ -272,12 +294,14 @@ export default function ScoreDisplay() {
                   })}
                 </div>
                 {playerCount > 0 &&
-                  roomData?.players?.some((p) => p != null && (p.score < 0 || p.total === 0)) && (
-                  <p className="text-dark-200 flex items-center gap-2 mt-2 text-xs">
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                    {t("syncingResults")}
-                  </p>
-                )}
+                  roomData?.players?.some(
+                    (p) => p != null && (p.score < 0 || p.total === 0)
+                  ) && (
+                    <p className="text-dark-200 flex items-center gap-2 mt-2 text-xs">
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      {t("syncingResults")}
+                    </p>
+                  )}
               </div>
             ) : (
               <p className="text-dark-200 flex items-center gap-2">
@@ -288,13 +312,54 @@ export default function ScoreDisplay() {
           </div>
         )}
 
+        {/* Continue Learning Section */}
+        {!practiceMode &&
+          selectedCategory &&
+          !selectedCategory.startsWith("practice-") && (
+            <div className="pt-6 border-t border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                {tPractice("continuelearning")}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {/* Practice missed questions from this quiz */}
+                {questions.some(
+                  (q, i) =>
+                    userAnswers[i] !== -1 && userAnswers[i] !== q.correctAnswer
+                ) && (
+                  <button
+                    type="button"
+                    onClick={startPracticeRecentMistakes}
+                    className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg font-medium transition-colors text-sm border border-red-200 flex items-center gap-2"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    {tPractice("practiceMissed")}
+                  </button>
+                )}
+
+                {/* Practice due questions */}
+                {dueCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={startPracticeDue}
+                    className="px-4 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg font-medium transition-colors text-sm border border-purple-200 flex items-center gap-2"
+                  >
+                    <BookOpen className="w-4 h-4" />
+                    {tPractice("practiceDue")} ({dueCount})
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
         {/* Question Review Grid */}
         <div className="pt-6 md:pt-8 border-t border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 md:mb-6 gap-2">
             <h3 className="text-lg md:text-xl font-bold text-dark-300">
               {t("questionReview")}
             </h3>
-            <p className="text-dark-200 text-xs md:text-sm">{t("clickToReview")}</p>
+            <p className="text-dark-200 text-xs md:text-sm">
+              {t("clickToReview")}
+            </p>
           </div>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-4">
@@ -334,11 +399,15 @@ export default function ScoreDisplay() {
                         : "bg-gray-100 text-gray-600"
                     }`}
                   >
-                    <span className="font-bold text-sm md:text-base">{index + 1}</span>
+                    <span className="font-bold text-sm md:text-base">
+                      {index + 1}
+                    </span>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <span className="text-xs md:text-sm font-medium">Q{index + 1}</span>
+                    <span className="text-xs md:text-sm font-medium">
+                      Q{index + 1}
+                    </span>
                     <div
                       className={`flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs ${
                         isAnswered
@@ -355,10 +424,14 @@ export default function ScoreDisplay() {
                           ) : (
                             <XCircle className="w-2.5 h-2.5 md:w-3 md:h-3" />
                           )}
-                          <span className="hidden sm:inline">{isCorrect ? t("correct") : t("wrong")}</span>
+                          <span className="hidden sm:inline">
+                            {isCorrect ? t("correct") : t("wrong")}
+                          </span>
                         </>
                       ) : (
-                        <span className="hidden sm:inline">{t("unanswered")}</span>
+                        <span className="hidden sm:inline">
+                          {t("unanswered")}
+                        </span>
                       )}
                     </div>
                   </div>

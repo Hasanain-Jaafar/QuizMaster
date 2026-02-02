@@ -165,6 +165,22 @@
     "rank": "#{rank}",
     "scoreFormat": "{score}/{total}"
   },
+  "progress": {
+    "title": "Din framsteg",
+    "streak": "Streak",
+    "longest": "Längst",
+    "quizzes": "Quiz slutförda",
+    "average": "Genomsnittlig noggrannhet",
+    "dueCount": "Att granska",
+    "practiceDue": "Öva förfallna frågor",
+    "resetProgress": "Återställ framsteg",
+    "days": "{count} dagar"
+  },
+  "practice": {
+    "practiceMissed": "Öva missade frågor",
+    "practiceDue": "Öva förfallna frågor",
+    "continuelearning": "Fortsätt lära"
+  },
   "optionButton": {
     "correct": "Rätt!",
     "incorrect": "Fel",
